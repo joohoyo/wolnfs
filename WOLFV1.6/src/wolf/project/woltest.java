@@ -24,15 +24,15 @@ public class woltest extends Activity {
 	private EditText mMacText;
 	private Long mRowId;
 	private EventsData mDbHelper;
-	
-    
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
+
 		CharSequence cs = "start ";
-		
+
 
 		//CharSequence cs2 = ipAddr2;
 
@@ -98,4 +98,4 @@ public class woltest extends Activity {
 	}
 }
 
-
+//test 08.25 08:23 nov
