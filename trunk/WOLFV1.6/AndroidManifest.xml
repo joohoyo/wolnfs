@@ -10,17 +10,22 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".About" android:label="@string/about_title"
+		<activity 
+			android:name=".About" 
+			android:label="@string/about_title"
 			android:theme="@android:style/Theme.Dialog">
 		</activity>
 
-		<activity android:name=".Data" android:label="@string/db_name">
+		<activity 
+			android:name=".Data" 
+			android:label="@string/db_name">
 		</activity>
-		<activity android:name=".woltest" android:label="@string/woltest">
+		
+
+		<activity 
+			android:name=".IPlistEdit">
 		</activity>
-
-		<activity android:name=".IPlistEdit"></activity>
-
+		
 	</application>
 	<uses-sdk android:minSdkVersion="3" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
