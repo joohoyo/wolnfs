@@ -1,19 +1,5 @@
-/*
- * Copyright (C) 2008 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License")savedInstanceState;
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package wolf.project;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,6 +20,8 @@ public class Data extends ListActivity {
     
     private EventsData mDbHelper;
     private Cursor mEventsCursor;
+    
+    private long mRowId;
     
     /** Called when the activity is first created. */
     @Override
@@ -102,21 +90,29 @@ public class Data extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Cursor c = mEventsCursor;
+    	super.onListItemClick(l, v, position, id);
+    	Cursor c = mDbHelper.fetchNote(id);
         c.moveToPosition(position);
-        Intent i = new Intent(this, woltest.class);
-        i.putExtra(EventsData.ROWID, id);
-        i.putExtra(EventsData.IP_ADDRESS, c.getString(
+        startManagingCursor(c);
+        
+    	Bundle bundle = new Bundle();
+        
+        bundle.putString(EventsData.IP_ADDRESS, c.getString(
                 c.getColumnIndexOrThrow(EventsData.IP_ADDRESS)));
-        i.putExtra(EventsData.MAC_ADDRESS, c.getString(
+        bundle.putString(EventsData.MAC_ADDRESS, c.getString(
                 c.getColumnIndexOrThrow(EventsData.MAC_ADDRESS)));
-        startActivityForResult(i, ACTIVITY_EDIT);
+        bundle.putLong(EventsData.ROWID, id);
+        
+        
+        Intent mIntent = new Intent();
+        mIntent.putExtras(bundle);
+        setResult(RESULT_OK, mIntent);
+        finish();
     }
-/*
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         fillData();
     }
-*/
 }
