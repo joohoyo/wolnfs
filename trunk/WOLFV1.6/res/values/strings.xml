@@ -28,4 +28,9 @@
     <string name="dbEdit_macadd">MAC   </string>
     <string name="dbEdit_save">Save</string>
     <string name="dbEdit_cancel">Cancel</string>
+    
+    <string name="wol_connecting">Connecting..</string>
+    <string name="wol_cancel">Cancel</string>
+    
+    <string name="selec_Ip_Text">Selected IP : </string>
 </resources>
