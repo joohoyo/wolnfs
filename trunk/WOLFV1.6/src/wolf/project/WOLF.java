@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 
 
 
 public class WOLF extends Activity implements OnClickListener {
+	private static final int ACTIVITY_SELECTED = 0;
+	
+	private String selec_Ip_Address;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,13 +38,24 @@ public class WOLF extends Activity implements OnClickListener {
     		break;
     	case R.id.iplist_button:
     		Intent j = new Intent(this, Data.class);
-    		startActivity(j);
+    		startActivityForResult(j, ACTIVITY_SELECTED);
     		break;
 
     	}
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    	super.onActivityResult(requestCode, resultCode, intent);
     	
-     
-
+    	TextView main_view_Ip = (TextView)findViewById(R.id.selected_Ip);
+    	
+    	Bundle extras = intent.getExtras();
+    	switch(requestCode) {
+    	case ACTIVITY_SELECTED:
+    		selec_Ip_Address = extras.getString(EventsData.IP_ADDRESS);
+    		main_view_Ip.setText(selec_Ip_Address);
+    	}
     }
     
 }
