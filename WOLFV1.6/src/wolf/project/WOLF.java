@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -13,13 +15,17 @@ public class WOLF extends Activity implements OnClickListener {
 	private static final int ACTIVITY_SELECTED = 0;
 	
 	private String selec_Ip_Address;
+	private EventsData mDbHelper;
+	
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
+        
+        long mDBhelple;
+        
         View iplistButton = this.findViewById(R.id.iplist_button);
         iplistButton.setOnClickListener(this);
         View ipsetButton = this.findViewById(R.id.ipset_button);
@@ -27,7 +33,6 @@ public class WOLF extends Activity implements OnClickListener {
         View aboutButton = this.findViewById(R.id.about_button);
         aboutButton.setOnClickListener(this);
     }
-    
     
     public void onClick(View v){
     	//ABOUT BUTTON Activity
@@ -57,5 +62,4 @@ public class WOLF extends Activity implements OnClickListener {
     		main_view_Ip.setText(selec_Ip_Address);
     	}
     }
-    
 }
