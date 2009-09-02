@@ -91,6 +91,7 @@ public class Data extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	super.onListItemClick(l, v, position, id);
+    	/*
     	Cursor c = mDbHelper.fetchNote(id);
         c.moveToPosition(position);
         startManagingCursor(c);
@@ -102,10 +103,13 @@ public class Data extends ListActivity {
         bundle.putString(EventsData.MAC_ADDRESS, c.getString(
                 c.getColumnIndexOrThrow(EventsData.MAC_ADDRESS)));
         bundle.putLong(EventsData.ROWID, id);
+        */
+    	Intent mIntent = new Intent();
+    	
+    	
+    	Cursor c = (Cursor) l.getItemAtPosition(position);
+    	mIntent.putExtra(EventsData.IP_ADDRESS, c.getString(2));
         
-        
-        Intent mIntent = new Intent();
-        mIntent.putExtras(bundle);
         setResult(RESULT_OK, mIntent);
         finish();
     }
