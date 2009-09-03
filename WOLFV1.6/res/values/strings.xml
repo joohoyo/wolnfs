@@ -7,11 +7,7 @@
     
     <string name="about">ABOUT</string>
     <string name="about_title">About WOLF</string>
-    <string name="about_text">\
- WOLF는 좀 짱인 프로그램인듯 합니다. 님이 조냉 기억력 십딱꾸리해가지고
-   집에다가 파일 놓고 오면 이거 쓰믄 되실듯..혼자 지하철역에서 딸치고 싶은데
-  파일이 없어도 이거 쓰믄 될듯..
-    </string>
+    <string name="about_text"> WOLF - WakeOnLan + Filesystem</string>
     <string name="db_name">IP select</string>
     
     <string name="woltest">woltest</string>
