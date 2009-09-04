@@ -17,7 +17,6 @@
 package wolf.project;
 
 import android.app.Activity;
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -27,101 +26,101 @@ import android.widget.EditText;
 public class IPlistEdit extends Activity {
 
 	private EditText mCommentText;
-    private EditText mIpText;
-    private EditText mMacText;
-    
-    private Long mRowId;
-    private EventsData mDbHelper;
+	private EditText mIpText;
+	private EditText mMacText;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mDbHelper = new EventsData(this);
-        mDbHelper.open();
-        setContentView(R.layout.db_edit);
-        
-       
-        mCommentText = (EditText) findViewById(R.id.comment);
-        mIpText = (EditText) findViewById(R.id.ipadd);
-        mMacText = (EditText) findViewById(R.id.macadd);
-        
-      
-        Button saveButton = (Button) findViewById(R.id.save);
-        Button cancelButton = (Button) findViewById(R.id.cancel);
-       
-        mRowId = savedInstanceState != null ? savedInstanceState.getLong(EventsData.ROWID) 
-                							: null;
+	private Long mRowId;
+	private EventsData mDbHelper;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mDbHelper = new EventsData(this);
+		mDbHelper.open();
+		setContentView(R.layout.db_edit);
+
+
+		mCommentText = (EditText) findViewById(R.id.comment);
+		mIpText = (EditText) findViewById(R.id.ipadd);
+		mMacText = (EditText) findViewById(R.id.macadd);
+
+
+		Button saveButton = (Button) findViewById(R.id.save);
+		Button cancelButton = (Button) findViewById(R.id.cancel);
+
+		mRowId = savedInstanceState != null ? savedInstanceState.getLong(EventsData.ROWID) 
+				: null;
 		if (mRowId == null) {
 			Bundle extras = getIntent().getExtras();            
 			mRowId = extras != null ? extras.getLong(EventsData.ROWID) 
-									: null;
+					: null;
 		}
 
 		populateFields();
-		
-        saveButton.setOnClickListener(new View.OnClickListener() {
 
-        	public void onClick(View view) {
-        		setResult(RESULT_OK);
-        		finish();
-        	}
+		saveButton.setOnClickListener(new View.OnClickListener() {
 
-        });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-        	public void onClick(View view) {
-        		finish();
-        	}
-        });
+			public void onClick(View view) {
+				setResult(RESULT_OK);
+				finish();
+			}
 
-    }
-    
-    private void populateFields() {
-        if (mRowId != null) {
-            Cursor note = mDbHelper.fetchNote(mRowId);
-            startManagingCursor(note);
-            
-            mCommentText.setText(note.getString(
-    	            note.getColumnIndexOrThrow(EventsData.COMMENT)));
-            mIpText.setText(note.getString(
-                    note.getColumnIndexOrThrow(EventsData.IP_ADDRESS)));
-            mIpText.setText(note.getString(
-                    note.getColumnIndexOrThrow(EventsData.IP_ADDRESS)));
-            mMacText.setText(note.getString(
-                    note.getColumnIndexOrThrow(EventsData.MAC_ADDRESS)));
-        }
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong(EventsData.ROWID, mRowId);
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        populateFields();
-    }
-    
-    private void saveState() {
-        String comment = mCommentText.getText().toString();
-        String ip = mIpText.getText().toString();
-        String mac = mMacText.getText().toString();
+		});
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				finish();
+			}
+		});
 
-        if (mRowId == null) {
-            long id = mDbHelper.createNote(comment,ip, mac);
-            if (id > 0) {
-                mRowId = id;
-            }
-        } else {
-            mDbHelper.updateNote(mRowId, comment, ip, mac);
-        }
-    }
-    
+	}
+
+	private void populateFields() {
+		if (mRowId != null) {
+			Cursor note = mDbHelper.fetchNote(mRowId);
+			startManagingCursor(note);
+
+			mCommentText.setText(note.getString(
+					note.getColumnIndexOrThrow(EventsData.COMMENT)));
+			mIpText.setText(note.getString(
+					note.getColumnIndexOrThrow(EventsData.IP_ADDRESS)));
+			mIpText.setText(note.getString(
+					note.getColumnIndexOrThrow(EventsData.IP_ADDRESS)));
+			mMacText.setText(note.getString(
+					note.getColumnIndexOrThrow(EventsData.MAC_ADDRESS)));
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong(EventsData.ROWID, mRowId);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		saveState();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		populateFields();
+	}
+
+	private void saveState() {
+		String comment = mCommentText.getText().toString();
+		String ip = mIpText.getText().toString();
+		String mac = mMacText.getText().toString();
+
+		if (mRowId == null) {
+			long id = mDbHelper.createNote(comment,ip, mac);
+			if (id > 0) {
+				mRowId = id;
+			}
+		} else {
+			mDbHelper.updateNote(mRowId, comment, ip, mac);
+		}
+	}
+
 }
