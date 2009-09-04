@@ -9,7 +9,7 @@ public class Fstest extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.fstest);
+		setContentView(R.layout.fstest);
 		
 		TextView tv2 = new TextView(this);
 		tv2.setText("hi");
