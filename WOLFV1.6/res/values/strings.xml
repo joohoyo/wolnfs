@@ -29,4 +29,6 @@
     <string name="wol_cancel">Cancel</string>
     
     <string name="selec_Ip_Text">Selected IP : </string>
+    
+    <string name="fstest">fstest</string>
 </resources>
