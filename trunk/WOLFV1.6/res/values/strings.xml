@@ -31,4 +31,5 @@
     <string name="selec_Ip_Text">Selected IP : </string>
     
     <string name="fstest">fstest</string>
+    <string name="it_is_empty">it is empty</string>
 </resources>
