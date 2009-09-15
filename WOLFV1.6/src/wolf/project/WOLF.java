@@ -1,5 +1,6 @@
 package wolf.project;
 
+import wolf.filesystem.FsList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,13 +43,14 @@ public class WOLF extends Activity implements OnClickListener {
 			Intent i = new Intent(this, About.class);
 			startActivity(i);
 			break;
+			
 		case R.id.iplist_button:
 			Intent j = new Intent(this, Data.class);
 			startActivityForResult(j, ACTIVITY_SELECTED);
 			break;
 			
 		case R.id.fstest_button:
-			Intent intentFstest = new Intent(this, Fstest.class);
+			Intent intentFstest = new Intent(this, FsList.class);
 			startActivity(intentFstest);
 			break;
 		}
