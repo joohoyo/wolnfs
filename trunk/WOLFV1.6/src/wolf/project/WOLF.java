@@ -50,8 +50,8 @@ public class WOLF extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.fstest_button:
-			Intent intentFstest = new Intent(this, FsList.class);
-			startActivity(intentFstest);
+			Intent intentFsList = new Intent(this, FsList.class);
+			startActivity(intentFsList);
 			break;
 		}
 	}

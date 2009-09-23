@@ -32,4 +32,6 @@
     
     <string name="fstest">fstest</string>
     <string name="it_is_empty">it is empty</string>
+    <string name="dir_colone">DIR :</string>
+    <string name="OK"> OK </string>
 </resources>
