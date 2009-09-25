@@ -29,11 +29,14 @@
 			android:name=".Data" 
 			android:label="@string/db_name">
 		</activity>
-
 		<activity 
 			android:name=".IPlistEdit">
 		</activity>
 		
+
+		<activity 
+			android:name=".Fstest">
+		</activity>
 		<activity 
 			android:name="wolf.filesystem.FsList">
 		</activity>
@@ -42,6 +45,7 @@
 			android:name="wolf.filesystem.FsDir"			
 			android:label="@string/dir_colone"
 			android:theme="@android:style/Theme.Dialog">			
+
 		</activity>
 		
 	</application>
