@@ -8,28 +8,17 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class woltest extends Activity {
-	private EditText mCommentText;
-	private EditText mIpText;
-	private EditText mMacText;
-	private Long mRowId;
-	private EventsData mDbHelper;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.wol_test);
 
 		CharSequence cs = "start ";
 
@@ -93,7 +82,12 @@ public class woltest extends Activity {
 		TextView tv = new TextView(this);
 		tv.setText(cs);
 		setContentView(tv);  
-
+		
+		
+		Intent R_wol_Intent = new Intent();
+		
+		setResult(RESULT_OK, R_wol_Intent);
+		finish();
 
 	}
 }

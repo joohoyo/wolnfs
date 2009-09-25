@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class WOLF extends Activity implements OnClickListener {
 	private static final int ACTIVITY_SELECTED = 0;
+	private static final int ACTIVITY_WOL_COMPLETE = 1;
 
 	private String selec_Ip_Address;
 	private EventsData mDbHelper;
@@ -50,8 +51,8 @@ public class WOLF extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.fstest_button:
-			Intent intentFsList = new Intent(this, FsList.class);
-			startActivity(intentFsList);
+			Intent i_woltest = new Intent(this, woltest.class);
+			startActivityForResult(i_woltest, ACTIVITY_WOL_COMPLETE);
 			break;
 		}
 	}
@@ -63,10 +64,15 @@ public class WOLF extends Activity implements OnClickListener {
 		TextView main_view_Ip = (TextView)findViewById(R.id.selected_Ip);
 
 		Bundle extras = intent.getExtras();
+		
 		switch(requestCode) {
 		case ACTIVITY_SELECTED:
 			selec_Ip_Address = extras.getString(EventsData.IP_ADDRESS);
 			main_view_Ip.setText(selec_Ip_Address);
+			
+		case ACTIVITY_WOL_COMPLETE:
+			Intent Go_FS_intent = new Intent(this, wolf.filesystem.FsList.class);
+			startActivity(Go_FS_intent);
 		}
 	}
 }

@@ -9,7 +9,8 @@ public class FsDir extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fs_dir);		
+		setContentView(R.layout.fs_dir);
+		
 		
 	}
 	
