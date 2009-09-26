@@ -19,13 +19,20 @@ public class FsList extends Activity implements OnClickListener {
 	
 	//private
 	private static final int ACTIVITY_DIR = 0;
-	
+	private FsUnit fsUnit = new FsUnit();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fs_list);
 
+		//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
+		
+		fsUnit.step(0); //init
+		Log.d(tag,"step1");
+		fsUnit.step(1); //request dir
+		Log.d(tag,"after step1");
+		//버튼 리스너
 		Button dirButton = (Button) findViewById(R.id.FS_Button_DIR);
 		dirButton.setOnClickListener(this);
 		Log.d(tag,"onCreate");
@@ -35,7 +42,6 @@ public class FsList extends Activity implements OnClickListener {
 		switch(v.getId()) {
 		case R.id.FS_Button_DIR:
 			Intent i = new Intent(this, FsDir.class);
-			//startActivityForResult(i,ACTIVITY_DIR);
 			startActivity(i);
 			break;
 		}

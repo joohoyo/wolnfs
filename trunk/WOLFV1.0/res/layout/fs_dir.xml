@@ -4,8 +4,9 @@
 	xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:layout_width="wrap_content"
 	android:layout_height="fill_parent" 
-	android:orientation="vertical">	
+	android:orientation="vertical"	>	
 	//android:id="@+id/LinearLayout01"
+	//크기 조절 할 수 있는게 뭘까요
 	
 	<TextView
 			 
