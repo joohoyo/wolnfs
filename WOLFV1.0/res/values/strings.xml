@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">WOL and File share</string>
+    <string name="main_title">WOLF</string>
+    <string name="ip_list">IP LIST</string>
+    <string name="ip_set">IP SETTING</string>
+    
+    <string name="about">ABOUT</string>
+    <string name="about_title">About WOLF</string>
+    <string name="about_text"> WOLF - WakeOnLan + Filesystem</string>
+    <string name="db_name">IP select</string>
+    
+    <string name="woltest">woltest</string>
+    
+    <string name="no_ip">IP is not Entry</string>
+    <string name="ip_insert">IP Add</string>
+    <string name="ip_delete">IP Delete</string>
+    <string name="ip_modify">IP Modify</string>
+    
+    <string name="dbEdit_title">IP Setting</string>
+    <string name="dbEdit_comment">Comment   </string>
+    <string name="dbEdit_dot">.</string>
+    <string name="dbEdit_ipadd">IP       </string>
+    <string name="dbEdit_macadd">MAC   </string>
+    <string name="dbEdit_save">Save</string>
+    <string name="dbEdit_cancel">Cancel</string>
+    
+    <string name="wol_connecting">Connecting..</string>
+    <string name="wol_cancel">Cancel</string>
+    <string name="warnning_Ip">Not Select IP</string>
+    
+    <string name="selec_Ip_Text">Selected IP : </string>
+    
+    <string name="fstest">fstest</string>
+    <string name="it_is_empty">it is empty</string>
+    <string name="dir_colone">DIR :</string>
+    <string name="OK"> OK </string>
+</resources>
