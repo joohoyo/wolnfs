@@ -3,6 +3,7 @@ package wolf.project;
 import wolf.filesystem.FsList;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ public class WOLF extends Activity implements OnClickListener {
 	private static final int ACTIVITY_WOL_COMPLETE = 1;
 
 	private String selec_Ip_Address;
+	private String selec_Mac_Address;
 	private EventsData mDbHelper;
 
 
@@ -21,8 +23,6 @@ public class WOLF extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		long mDBhelple;
 
 		View iplistButton = this.findViewById(R.id.iplist_button);
 		iplistButton.setOnClickListener(this);
@@ -50,14 +50,18 @@ public class WOLF extends Activity implements OnClickListener {
 			startActivityForResult(j, ACTIVITY_SELECTED);
 			break;
 			
-		case R.id.wol_complete_test:
-			Intent i_woltest = new Intent(this, woltest.class);
-			startActivityForResult(i_woltest, ACTIVITY_WOL_COMPLETE);
-			break;
-			
 		case R.id.fstest_button:
-			Intent i_FsList = new Intent(this, FsList.class);
-			startActivity(i_FsList);			
+			if (selec_Ip_Address != null){
+				Intent i_woltest = new Intent(this, woltest.class);
+
+				i_woltest.putExtra("selectIP", selec_Ip_Address);
+				i_woltest.putExtra("selectMAC", selec_Mac_Address);
+				startActivityForResult(i_woltest, ACTIVITY_WOL_COMPLETE);
+			}
+			else{
+				Intent i_selec_warn = new Intent (this, selecIp.class);
+				startActivity(i_selec_warn);
+			}
 			break;
 		}
 	}
@@ -73,11 +77,14 @@ public class WOLF extends Activity implements OnClickListener {
 		switch(requestCode) {
 		case ACTIVITY_SELECTED:
 			selec_Ip_Address = extras.getString(EventsData.IP_ADDRESS);
+			selec_Mac_Address = extras.getString(EventsData.MAC_ADDRESS);
 			main_view_Ip.setText(selec_Ip_Address);
+			break;
 			
 		case ACTIVITY_WOL_COMPLETE:
 			Intent Go_FS_intent = new Intent(this, wolf.filesystem.FsList.class);
 			startActivity(Go_FS_intent);
+			break;
 		}
 	}
 }
