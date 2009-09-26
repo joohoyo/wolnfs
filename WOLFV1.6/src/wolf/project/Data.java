@@ -109,6 +109,7 @@ public class Data extends ListActivity {
 
 		Cursor c = (Cursor) l.getItemAtPosition(position);
 		mIntent.putExtra(EventsData.IP_ADDRESS, c.getString(2));
+		mIntent.putExtra(EventsData.MAC_ADDRESS, c.getString(3));
 
 		setResult(RESULT_OK, mIntent);
 		finish();

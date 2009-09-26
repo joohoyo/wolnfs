@@ -33,6 +33,16 @@
 			android:name=".IPlistEdit">
 		</activity>
 		
+
+		<activity
+			android:name=".selecIp"
+			android:theme="@android:style/Theme.Dialog">>
+		</activity>
+		<activity
+			android:name=".woltest"
+			android:theme="@android:style/Theme.Dialog">>
+		</activity>
+		
 		<activity 
 			android:name="wolf.filesystem.FsList">
 		</activity>
