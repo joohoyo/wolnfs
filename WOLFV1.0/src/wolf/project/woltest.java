@@ -16,9 +16,14 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class woltest extends Activity {
+	public static String get_selec_IP;
+	public static String get_selec_MAC;
+	public static String cs2;
+	/*
 	private String get_selec_IP;
 	private String get_selec_MAC;
 	private String cs2;
+	*/
 	//private String ipAddr;
 	//private String macAddr;
 	
@@ -37,7 +42,6 @@ public class woltest extends Activity {
 		wol_view_Ip.setText(get_selec_IP);		
 
 //Ω√¿€
-		CharSequence cs = "start ";
 		//String ipAddr = "192.168.0.4";
 		//String ipAddr = "255.255.255.255";
 		String macAddr = "00-0C-F1-6F-C9-4D";
@@ -52,7 +56,6 @@ public class woltest extends Activity {
 			host = InetAddress.getByName(get_selec_IP);
 		} catch (UnknownHostException euhe)
 		{
-			cs = cs + "UnknownHostException ";
 			//doing something 
 		}
 		
@@ -61,13 +64,11 @@ public class woltest extends Activity {
 			String byteToken = tokenizer.nextToken();
 			macBytes[i] = (byte)Integer.parseInt(byteToken, 16);
 		}
-		
 
 		try {
 			socket = new DatagramSocket();			
 		} catch(SocketException ese)
-		{
-			cs = cs + "SocketException ";
+		{		
 			//doing something
 		}
 
@@ -85,17 +86,10 @@ public class woltest extends Activity {
 			socket.send(packet);
 		} catch (IOException eioe)
 		{
-			cs = cs + "IOException ";
 			//doing something			
 		}
-
-		cs = cs + " :GOOD";
-		
-		TextView tv = new TextView(this);
-		tv.setText(cs);
-		setContentView(tv);         
+         
 //≥°
-		
 		
 		Intent i_wol_Intent = new Intent();		
 		setResult(RESULT_OK, i_wol_Intent);
