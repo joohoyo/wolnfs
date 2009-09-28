@@ -16,9 +16,10 @@ public class FsList extends Activity implements OnClickListener {
 	//public
 	public static final String DIR_PATH = "dir_path";
 	public static String dirPath = "C:\\";
+	public static String fsList = "";
 	
 	//private
-	private static final int ACTIVITY_DIR = 0;
+	private static final int ACTIVITY_DIR = 0;	
 	private FsUnit fsUnit = new FsUnit();
 
 	@Override
@@ -28,11 +29,7 @@ public class FsList extends Activity implements OnClickListener {
 
 		//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
 		
-		fsUnit.step(0); //init
-		Log.d(tag,"step1");
-		fsUnit.step(1); //request dir
-		Log.d(tag,"after step1");
-		//버튼 리스너
+	//버튼 리스너
 		Button dirButton = (Button) findViewById(R.id.FS_Button_DIR);
 		dirButton.setOnClickListener(this);
 		Log.d(tag,"onCreate");
@@ -53,5 +50,16 @@ public class FsList extends Activity implements OnClickListener {
 		Log.d(tag,"onResume");
 		TextView t = (TextView) findViewById(R.id.FS_TextView_DIR);
 		t.setText(dirPath);
+	
+		//임시적인 위치와 임시적인 textview 출력
+		fsUnit.step(0); //init
+		Log.d(tag,"step1");
+		fsUnit.step(1); //request dir
+		Log.d(tag,"after step1");
+		
+		TextView tv = (TextView) findViewById(R.id.FS_TextView_DIR);
+		Log.d("FSLIST",fsList);
+		tv.setText(fsList);
+	
 	}
 }
