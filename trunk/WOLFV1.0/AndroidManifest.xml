@@ -51,8 +51,12 @@
 			android:name="wolf.filesystem.FsDir"			
 			android:label="@string/dir_colone"
 			android:theme="@android:style/Theme.Dialog">			
-
 		</activity>
+		
+		<activity 
+			android:name="wolf.filesystem.FsTabView">	
+		</activity>
+		
 		
 	</application>
 	

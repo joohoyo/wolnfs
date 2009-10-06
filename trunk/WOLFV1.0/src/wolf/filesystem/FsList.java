@@ -1,16 +1,23 @@
 package wolf.filesystem;
 
+import java.util.ArrayList;
 import wolf.project.R;
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TabHost;
 import android.widget.TextView;
+import android.app.TabActivity;
 
-public class FsList extends Activity implements OnClickListener {
+public class FsList extends ListActivity implements OnClickListener {
 	private static final String tag = "FsList";
 	
 	//public
@@ -25,15 +32,17 @@ public class FsList extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fs_list);
+//		setContentView(R.layout.list);
 
-		//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
+		
+	//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
 		
 	//버튼 리스너
 		Button dirButton = (Button) findViewById(R.id.FS_Button_DIR);
 		dirButton.setOnClickListener(this);
 		Log.d(tag,"onCreate");
 	}		
+
 
 	public void onClick(View v){
 		switch(v.getId()) {
@@ -42,15 +51,35 @@ public class FsList extends Activity implements OnClickListener {
 			startActivity(i);
 			break;
 		}
+	
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		ArrayList<String> Arr_fsList = new ArrayList<String>();
 		Log.d(tag,"onResume");
-		TextView t = (TextView) findViewById(R.id.FS_TextView_DIR);
+
+		fsUnit.step(0); //init
+		Log.d(tag,"step1");
+		fsUnit.step(1); //request dir
+		Log.d(tag,"after step1");
+		
+		Arr_fsList.add(fsList);
+		
+		ArrayAdapter<String> Ar_List = new ArrayAdapter<String>(this,                
+		android.R.layout.simple_list_item_1, Arr_fsList); 
+		setListAdapter(Ar_List);
+/*
+        setListAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1));
+*/
+	}
+		
+		
+/*
+ 		TextView t = (TextView) findViewById(R.id.FS_TextView_DIR);
 		t.setText(dirPath);
-	
 		//임시적인 위치와 임시적인 textview 출력
 		fsUnit.step(0); //init
 		Log.d(tag,"step1");
@@ -60,6 +89,7 @@ public class FsList extends Activity implements OnClickListener {
 		TextView tv = (TextView) findViewById(R.id.FS_TextView_DIR);
 		Log.d("FSLIST",fsList);
 		tv.setText(fsList);
-	
+
 	}
+*/
 }

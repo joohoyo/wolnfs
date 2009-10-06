@@ -82,7 +82,7 @@ public class WOLF extends Activity implements OnClickListener {
 			break;
 			
 		case ACTIVITY_WOL_COMPLETE:
-			Intent Go_FS_intent = new Intent(this, wolf.filesystem.FsList.class);
+			Intent Go_FS_intent = new Intent(this, wolf.filesystem.FsTabView.class);
 			startActivity(Go_FS_intent);
 			break;
 		}
