@@ -1,9 +1,7 @@
 package wolf.project;
 
-import wolf.filesystem.FsList;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,8 +28,7 @@ public class WOLF extends Activity implements OnClickListener {
 		ipsetButton.setOnClickListener(this);
 		View aboutButton = this.findViewById(R.id.about_button);
 		aboutButton.setOnClickListener(this);
-		
-		//////////////////////////////////////////////////////nov9.4
+	
 		View fstestButton = this.findViewById(R.id.fstest_button);
 		fstestButton.setOnClickListener(this);
 		
@@ -40,9 +37,9 @@ public class WOLF extends Activity implements OnClickListener {
 	public void onClick(View v){
 		//ABOUT BUTTON Activity
 		switch (v.getId()){
-		case R.id.about_button:
+		case R.id.about_button:			
 			Intent i = new Intent(this, About.class);
-			startActivity(i);
+			startActivity(i);			
 			break;
 			
 		case R.id.iplist_button:

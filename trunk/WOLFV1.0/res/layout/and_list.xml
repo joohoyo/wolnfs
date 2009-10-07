@@ -12,7 +12,7 @@
 		android:padding="10dip">
 
 		<EditText 
-			android:id="@+id/FS_EditText_DIR" 
+			android:id="@+id/AND_EditText_DIR" 
 			android:layout_height="wrap_content"  
 			android:layout_width="wrap_content"
 			android:layout_weight="1"
@@ -21,7 +21,7 @@
 		</EditText>
 		
 		<Button
-			android:id="@+id/FS_Button_DIR"
+			android:id="@+id/AND_Button_DIR"
 			android:layout_width="70dip" 
 			android:layout_height="wrap_content"
 			android:text="@string/dir_colone" >

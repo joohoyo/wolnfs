@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class FsDir extends Activity implements OnClickListener{
+public class NewDir extends Activity implements OnClickListener{
 	private static final String tag = "FsDir";
 	
 	private EditText e = null;
