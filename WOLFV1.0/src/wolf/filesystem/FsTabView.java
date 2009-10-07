@@ -1,5 +1,6 @@
 package wolf.filesystem;
 
+import wolf.android.AndList;
 import wolf.project.R;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -16,12 +17,12 @@ public class FsTabView extends TabActivity {
 		TabHost tabHost = getTabHost();
 
 		tabHost.addTab(tabHost.newTabSpec("tab1")
-			   .setIndicator("ANDROID")
+			   .setIndicator("SERVER")
 			   .setContent(new Intent(this, FsList.class)));
 
         tabHost.addTab(tabHost.newTabSpec("tab2")
- 			   .setIndicator("SERVER")
-               .setContent(new Intent(this, FsList.class)));
+ 			   .setIndicator("ANDROID")
+               .setContent(new Intent(this, AndList.class)));
 
 	}
 

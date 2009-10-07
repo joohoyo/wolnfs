@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background" 
+	android:orientation="horizontal"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:padding="30dip">
+
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_height="wrap_content" 
+		android:layout_width="fill_parent"
+		android:layout_gravity="center">
+
+		<TextView android:text="@string/main_title"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_gravity="center" 
+			android:layout_marginBottom="50dip"
+			android:textSize="24.6sp" />
+
+		<LinearLayout 
+			android:orientation="vertical"
+			android:layout_gravity="left" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_marginBottom="80dip">
+			
+			<TextView 
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" 
+				android:text="@string/selec_Ip_Text" />
+
+			<TextView 
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" 
+				android:text="- NOT SELECT IP -"
+				android:id="@+id/selected_Ip" />
+		</LinearLayout>
+
+		<TableLayout 
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_gravity="center"
+			android:stretchColumns="*">
+			
+			<TableRow>
+				<Button 
+					android:id="@+id/iplist_button" 
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					android:text="@string/ip_list" />
+
+				<Button 
+					android:id="@+id/ipset_button" 
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					android:text="@string/ip_set" />
+			</TableRow>
+			<TableRow>
+				<Button 
+					android:id="@+id/about_button" 
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					android:text="@string/about" />
+
+				<Button 
+					android:id="@+id/fstest_button" 
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" 
+					android:text="@string/fstest" />
+			</TableRow>
+		</TableLayout>
+	</LinearLayout>
+</LinearLayout>

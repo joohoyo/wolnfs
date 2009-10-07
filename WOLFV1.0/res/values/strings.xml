@@ -31,8 +31,13 @@
     
     <string name="selec_Ip_Text">Selected IP : </string>
     
-    <string name="fstest">fstest</string>
-    <string name="it_is_empty">it is empty</string>
+    <string name="fstest">fstest</string>    
     <string name="dir_colone">G O</string>
     <string name="OK"> OK </string>
+    
+    <string name="create_dir">Create DIR</string>
+    <string name="delete_dir">Delete DIR</string>
+    
+    
+    
 </resources>

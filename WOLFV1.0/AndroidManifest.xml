@@ -57,6 +57,10 @@
 			android:name="wolf.filesystem.FsTabView">	
 		</activity>
 		
+		<activity
+			android:name="wolf.android.AndList">
+		</activity>
+		
 		
 	</application>
 	

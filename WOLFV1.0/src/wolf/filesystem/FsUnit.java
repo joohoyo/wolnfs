@@ -11,28 +11,21 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import wolf.project.woltest;
 import android.util.Log;
 
 //public class FsUnit {
-public class FsUnit {
+public class FsUnit implements FSConstant {
 	private static final String tag = "FsUnit";
 
 	private static int stepNumber;
-	private static int serverPortNumber = 12312;
-	private static int androidPortNumber = 12313; 
-	private static final int STEP_INIT = 0;
-	private static final int STEP_REQUEST_DIR = 1;
-	private static final int STEP_REQUEST_FILE = 3;
-	private static final int STEP_CLOSE = 5;
 
-	public InetAddress serverAddress = null;
-	public Socket receiveSocket = null;
-	
-	public Socket sendSocket = null;
-
-	public BufferedReader in = null;
+	private ServerSocket androidSocket = null;
+	private InetAddress serverAddress = null;	
+	private Socket sendSocket = null;
+	private Socket receiveSocket = null;
 
 	void step(int stepNumber) {
 		this.stepNumber = stepNumber;
@@ -46,114 +39,110 @@ public class FsUnit {
 		case STEP_REQUEST_FILE:
 			requestFile();
 			break;
+		case STEP_CREATE_DIR:
+			createDir();
 		case STEP_CLOSE:
 			close();
 		}
 	}
 
 	void init() {
-		//woltest.get_selec_IP <- 서버의 ip정보
+		//안드로이드 폰의 서버 소켓 확보
+		try {
+			androidSocket = new ServerSocket(androidPortNumber);
+			androidSocket.setSoTimeout(50000);  // ?
+		} catch (IOException e1) { 
+			// do nothing
+		}
 
-		//주소 확보
+		// woltest.get_selec_IP <- 서버의 ip정보		
+		// 서버 주소 확보
+		// TODO : 서버 확보 될 때까지 기다리기 -nov
 		try {
 			serverAddress = InetAddress.getByName(woltest.get_selec_IP);
 		} catch (UnknownHostException e2) {
 			// do nothing
-		}
-		//서버확인
-		int iteration = 1;
-		while(true) {
-			if (isPortNumber(iteration)) break;
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// do nothing
-			}
-			iteration++;
-		}
-		
-		//여기까지 오면 전송 가능		
+		}				 
 	}
 
-	boolean isPortNumber(int iteration) {
-		//필요한지는 모르겠지만 서버에서 기본포트넘버(12312)로 실패하였을경우
-		//차례대로 증가 시키면서 검색한다. 1, 12, 123 이런식으로		
-		for(int i=0;i<iteration;i++)
-		{
-			boolean checkServer = true;
-			try {			
-				sendSocket = new Socket(serverAddress, serverPortNumber+i);
-			} catch (IOException e1) {
-				checkServer = false;
-				// 아직 서버가 준비되지 않았음
-				// 라고 뭔가 보여줘야 하지 않을까
-			}
-			if (checkServer) {
-				serverPortNumber += i;
-				return true;
-			}
-		}		
-		return false;
-	}
 
-	void requestDir() {
-		ServerSocket androidSocket = null;
-		Socket so = null;
+	void requestDir() {		
 		BufferedReader in = null;
 		PrintWriter out = null;
 		try {
+			
+			// dirPath 보내기
+			sendSocket = new Socket(serverAddress, serverPortNumber);			
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
-
-			out.println("1. "+FsList.dirPath+"\n"); 
+			out.println("" + STEP_REQUEST_DIR + " " + FsList.dirPath+"\n"); 
 			out.flush();
-
-			//androidPortNumber = sendSocket.getLocalPort();
 			sendSocket.close();
-			Log.d(tag,"println(1.dirpath) portNumber:"+androidPortNumber);
 			
-			androidSocket = new ServerSocket(androidPortNumber);
-			androidSocket.setSoTimeout(5000);
-
-			Log.d(tag,"println(1.dirpath) portNumber:"+androidPortNumber);
-			so = androidSocket.accept();
+			
+			// receiveSocket으로 대기
+						
+			receiveSocket = androidSocket.accept();
 			Log.d(tag,"accept");
-			in = new BufferedReader(new InputStreamReader(so.getInputStream()));	
-
-			//TextView t = (TextView) Activity.findViewById(R.id.FS_TextView_DIR);
+			in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));	
+					
+			int fsListCount = Integer.valueOf(in.readLine());
 			
-			String strAll = null;
+						
+			ArrayList<String> arrayFiles = new ArrayList<String>();
+			
+			FsList.arrayFsList.clear();
+			FsList.fsDirCount = 0;
+			
 			/*
-			while(true) {
-			
-				String str = in.readLine();
-				if (str.equals(new String("\n"))) {
-					break;
-				}
-				strAll += str;				
+			 * 			String strFromAndroid[] = in.readLine().split(" ", 2);
+			 * 			if (strFromAndroid[0].equals(new String("1."))) {
+				//dirlist
+				dirList(strFromAndroid[1]);
 			}
+
+			 * 
+			 * 
 			 */
-			int debugi=0;
-			
-			while(true) {
-				
-				debugi++;
-				
-				String str = in.readLine();
-				Log.d(tag,debugi + str);
-				if (str == null) {
+			for(int i=0;i<fsListCount;i++) {					
+				String strTemp[] = in.readLine().split(" ", 2);
+				if (strTemp == null) {
 					break;
 				}
-				FsList.fsList = FsList.fsList + str + "\n";				
+				if (strTemp[0].equals(new String("D.")))
+				{
+					FsList.fsDirCount ++;
+					FsList.arrayFsList.add(strTemp[1]);
+				}
+				else
+				{			
+					arrayFiles.add(strTemp[1]);
+				}				
 			}
-			so.close();
-			
+			FsList.arrayFsList.addAll(arrayFiles);
+			receiveSocket.close();			
 		} catch(IOException e) {
-			Log.d(tag, "what'up");
+			Log.d(tag, "what'up" + e.toString());
 			//do nothing
+		}		
+	}
+	
+	void createDir() {
+		BufferedReader in = null;
+		PrintWriter out = null;
+		try {
+			
+			// dirPath 보내기
+			sendSocket = new Socket(serverAddress, serverPortNumber);			
+			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
+			out.println("" + STEP_CREATE_DIR + " " + FsList.dirPath+"\n"); 
+			out.flush();
+			sendSocket.close();			
+		} catch(IOException e) {
+			Log.d(tag, "createdir err");
+			// do nothing
 		}
-		
-		
-		
+		requestDir();
+
 	}
 
 	void requestFile() {
@@ -161,7 +150,12 @@ public class FsUnit {
 	}
 
 	void close() {
-		//out.close();
+		//안드로이드 폰의 소켓 닫기
+		try {
+			androidSocket.close();
+		} catch (IOException e) {
+			// do nothing
+		}
 	}
 	/*
 	 * 0. 초기화(tcp 설정)
