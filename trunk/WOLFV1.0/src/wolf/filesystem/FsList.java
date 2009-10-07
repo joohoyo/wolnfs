@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.app.TabActivity;
@@ -28,32 +29,33 @@ public class FsList extends ListActivity implements OnClickListener {
 	//private
 	private static final int ACTIVITY_DIR = 0;	
 	private FsUnit fsUnit = new FsUnit();
+	private EditText pathEdit = null;
 
+	//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.list);
-
-		
-	//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
-		
+		setContentView(R.layout.fs_list);
+			
 	//버튼 리스너
 		Button dirButton = (Button) findViewById(R.id.FS_Button_DIR);
 		dirButton.setOnClickListener(this);
 		Log.d(tag,"onCreate");
-	}		
+	
+	//에디트 박스
+		pathEdit = (EditText) findViewById(R.id.FS_DIR_EditText);
+		pathEdit.setText(dirPath);
+	}
 
-
+	//onClick method : 경로만 보이게 설정 해 놓음 - Jp
 	public void onClick(View v){
 		switch(v.getId()) {
 		case R.id.FS_Button_DIR:
-			Intent i = new Intent(this, FsDir.class);
-			startActivity(i);
+			dirPath = pathEdit.getText().toString();
 			break;
-		}
-	
+		}	
 	}
-
+	/*	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -66,18 +68,18 @@ public class FsList extends ListActivity implements OnClickListener {
 		Log.d(tag,"after step1");
 		
 		Arr_fsList.add(fsList);
-		
+	
 		ArrayAdapter<String> Ar_List = new ArrayAdapter<String>(this,                
 		android.R.layout.simple_list_item_1, Arr_fsList); 
 		setListAdapter(Ar_List);
-/*
+
         setListAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1));
-*/
+
 	}
 		
 		
-/*
+
  		TextView t = (TextView) findViewById(R.id.FS_TextView_DIR);
 		t.setText(dirPath);
 		//임시적인 위치와 임시적인 textview 출력
