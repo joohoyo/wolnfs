@@ -29,11 +29,12 @@ import android.widget.ArrayAdapter;
 public class Unit implements Constant {
 	private static final String tag = "FsUnit";
 
-	private String androidPath = "\\";
+	private String androidPath = "/";
 	private String serverPath = "C:\\";
 
 	private int stepNumber;
 	private static int onRunning = 0;
+	private static int turn = FS;
 
 	private ServerSocket androidSocket = null;
 	private InetAddress serverAddress = null;	
@@ -154,22 +155,27 @@ public class Unit implements Constant {
 		}		
 	}
 
-	// server측 Folder 만들기
+	// Folder 만들기
 	void createDir() {
 		BufferedReader in = null;
 		PrintWriter out = null;
-		try {			
-			// dirPath 보내기
-			sendSocket = new Socket(serverAddress, serverPortNumber);			
-			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
-			out.println("" + STEP_CREATE_DIR + " " + serverPath+"\n"); 
-			out.flush();
-			sendSocket.close();			
-		} catch(IOException e) {
-			Log.d(tag, "createdir err");
-			// do nothing
+		if (turn == FS) {
+			try {			
+				// dirPath 보내기
+				sendSocket = new Socket(serverAddress, serverPortNumber);			
+				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
+				out.println("" + STEP_CREATE_DIR + " " + serverPath+"\n");			
+				out.flush();
+				sendSocket.close();			
+			} catch(IOException e) {
+				Log.e(tag, "createdir err");
+				// do nothing
+			}		
 		}
-		requestDir();
+		else {
+			File f = new File(androidPath);
+			f.mkdir();
+		}
 	}
 
 	//안드로이드 폰의 서버 소켓 확보
@@ -216,9 +222,16 @@ public class Unit implements Constant {
 		return androidPath;
 	}
 	public void setAndroidPath(String androidPath) {
-		if (androidPath.charAt(androidPath.length()-1) != '\\') {
-			androidPath = androidPath + '\\';
+		if (androidPath.charAt(androidPath.length()-1) != '/') {
+			androidPath = androidPath + '/';
 		}
 		this.androidPath = androidPath;
 	}
+	// 활성화되어 있는 Activity는 누구?
+	public int getTurn() {
+		return turn;
+	}
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}	
 }

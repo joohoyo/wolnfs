@@ -37,7 +37,8 @@
     <string name="OK"> OK </string>
     
     <string name="create_dir">Create DIR</string>
-    <string name="delete_dir">Delete DIR</string>
+    <string name="delete">Delete</string>
+    <string name="send">Send</string>
     
     
     
