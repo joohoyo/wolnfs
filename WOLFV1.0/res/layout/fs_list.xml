@@ -17,14 +17,21 @@
 			android:layout_width="wrap_content"
 			android:layout_weight="1"
 			android:gravity="fill_horizontal"
-			android:hint="         CHANGE PATH">
+			android:hint="      CHANGE PATH">
 		</EditText>
 		
 		<Button
 			android:id="@+id/FS_Button_DIR"
-			android:layout_width="70dip" 
+			android:layout_width="50dip" 
 			android:layout_height="wrap_content"
 			android:text="@string/dir_colone" >
+		</Button>
+		
+		<Button
+			android:id="@+id/FS_Button_DIRUP"
+			android:layout_width="50dip"
+			android:layout_height="wrap_content"
+			android:text="@string/dir_up" >
 		</Button>
 		
 	</LinearLayout>
