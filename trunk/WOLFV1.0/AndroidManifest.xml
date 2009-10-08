@@ -43,10 +43,7 @@
 			android:theme="@android:style/Theme.Dialog">>
 		</activity>
 		
-		<activity 
-			android:name="wolf.filesystem.FsList">
-		</activity>
-		
+		// 이거 쓸모 없는듯? 		
 		<activity
 			android:name="wolf.filesystem.FsDir"			
 			android:label="@string/dir_colone"
@@ -56,9 +53,13 @@
 		<activity 
 			android:name="wolf.filesystem.FsTabView">	
 		</activity>
+
+		<activity 
+			android:name="wolf.filesystem.FsList">
+		</activity>
 		
 		<activity
-			android:name="wolf.android.AndList">
+			android:name="wolf.filesystem.AndList">
 		</activity>
 		
 		

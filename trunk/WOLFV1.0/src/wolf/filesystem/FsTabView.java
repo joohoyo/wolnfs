@@ -1,6 +1,5 @@
 package wolf.filesystem;
 
-import wolf.android.AndList;
 import wolf.project.R;
 import android.app.TabActivity;
 import android.content.Intent;

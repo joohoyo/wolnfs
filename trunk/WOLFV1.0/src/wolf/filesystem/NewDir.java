@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class NewDir extends Activity implements OnClickListener{
+public class NewDir extends Activity implements OnClickListener, Constant{
 	private static final String tag = "FsDir";
 	
 	private EditText e = null;
@@ -22,7 +22,7 @@ public class NewDir extends Activity implements OnClickListener{
 		setContentView(R.layout.fs_dir);
 		
 		e = (EditText) findViewById(R.id.FS_DIR_EditText);
-		e.setText(FsList.dirPath);
+		e.setText(new Unit().getServerPath());
 		
 
 		Button dirButton = (Button) findViewById(R.id.FS_DIR_Button);
@@ -33,8 +33,7 @@ public class NewDir extends Activity implements OnClickListener{
 		switch(v.getId()) {
 		case R.id.FS_DIR_Button:			
 			Log.d(tag, "FsDir:line26");
-			
-			FsList.dirPath = e.getText().toString();			
+			new Unit().setServerPath(e.getText().toString());			
 			finish();
 			break;
 		}			

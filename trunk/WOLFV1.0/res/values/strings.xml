@@ -33,6 +33,7 @@
     
     <string name="fstest">fstest</string>    
     <string name="dir_colone">G O</string>
+    <string name="dir_up">↑</string>
     <string name="OK"> OK </string>
     
     <string name="create_dir">Create DIR</string>
