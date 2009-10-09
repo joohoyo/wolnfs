@@ -1,7 +1,6 @@
 package wolf.filesystem;
 
 import java.util.ArrayList;
-
 import wolf.project.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,12 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+
 
 public class FsList extends ListActivity implements OnClickListener, Constant {
 	private static final String tag = "FsList";
@@ -42,7 +43,8 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 	//private static final int ACTIVITY_DIR = 0;	
 	private Unit unit = new Unit();
 	private EditText pathEdit = null;
-
+	
+	
 	//서버와 연결하기 - 연결하기 전에 서버의 부팅시간 고려
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,10 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 
 		Button upButton = (Button) findViewById(R.id.FS_Button_DIRUP);
 		upButton.setOnClickListener(this);
+		
+		//context Listener
+
+		
 
 		//에디트 박스
 		pathEdit = (EditText) findViewById(R.id.FS_EditText_DIR);		
@@ -97,8 +103,9 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 			return ;
 		}		
 	}
-
+/*
 	// item을 누르고 있을 때의 메뉴
+	// setOnItemLongClickListener
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 
@@ -111,13 +118,13 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 			return;
 		}
 		
-		/*
-        Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
-        if (cursor == null) {
-        	Log.d(tag, "null");
-            return;
-        }
-		 */
+
+//        Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
+//        if (cursor == null) {
+//        	Log.d(tag, "null");
+//            return;
+//        }
+		 
 		// Setup the menu header
 		menu.setHeaderTitle("CONTEXT_MENU");
 
@@ -125,7 +132,7 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
 		
 	}
-
+*/
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -153,6 +160,26 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		ArrayAdapter<String> adList = new ArrayAdapter<String>(this,                
 				android.R.layout.simple_list_item_1, arrayFsList); 
 		setListAdapter(adList);
+		
+		ListView con_List = getListView();
+
+		con_List.setOnCreateContextMenuListener(new OnCreateContextMenuListener() { 
+			@Override
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
+				AdapterView.AdapterContextMenuInfo info;
+				try {
+					info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+				} catch (ClassCastException e) {
+					Log.e(tag, "bad menuInfo", e);
+					return;
+				}
+				menu.setHeaderTitle("CONTEXT_MENU");
+
+				menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.delete);
+				menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
+				
+			}});
+
 
 		Log.d(tag,"" + arrayFsList.size() + unit.getServerPath());
 	}
