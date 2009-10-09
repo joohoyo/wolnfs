@@ -16,11 +16,11 @@ public class FsTabView extends TabActivity {
 		TabHost tabHost = getTabHost();
 
 		tabHost.addTab(tabHost.newTabSpec("tab1")
-			   .setIndicator("SERVER")
+			   .setIndicator("SERVER", getResources().getDrawable(R.drawable.server))
 			   .setContent(new Intent(this, FsList.class)));
 
         tabHost.addTab(tabHost.newTabSpec("tab2")
- 			   .setIndicator("ANDROID")
+ 			   .setIndicator("ANDROID", getResources().getDrawable(R.drawable.android))
                .setContent(new Intent(this, AndList.class)));
 
 	}

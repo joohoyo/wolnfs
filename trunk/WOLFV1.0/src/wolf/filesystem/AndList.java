@@ -69,6 +69,7 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 		Log.d(tag,"position = " + position);
 		if (position < andDirCount) {
 			unit.setAndroidPath(unit.getAndroidPath() + arrayAndList.get(position));			

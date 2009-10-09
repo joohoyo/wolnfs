@@ -89,6 +89,7 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 		Log.d(tag,"position = " + position);		
 		if (position < fsDirCount) {  // TODO : 디렉토리 나타내는 표식을 해야 할 듯			
 			unit.setServerPath(unit.getServerPath() + arrayFsList.get(position));			
@@ -175,7 +176,7 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch(item.getItemId()) {		
 		case MENU_CREATE_DIR:
-			showDialog(DIALOG_CREATE_DIR);			
+			showDialog(DIALOG_CREATE_DIR);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
