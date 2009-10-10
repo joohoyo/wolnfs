@@ -15,6 +15,7 @@ public interface Constant {
 	
 	public int CONTEXT_MENU_ITEM_DELETE = Menu.FIRST;
 	public int CONTEXT_MENU_ITEM_SEND = Menu.FIRST + 1;
+	public int CONTEXT_MENU_ITEM_PLAY = Menu.FIRST + 2;
 	
 	public int DIALOG_CREATE_DIR = 1;
 	public int DIALOG_DELETE = 2;
