@@ -1,23 +1,32 @@
 package wolf.filesystem;
 
 import java.util.ArrayList;
-
 import wolf.project.R;
+import wolf.project.woltest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class AndList extends ListActivity implements OnClickListener, Constant {
 	private static final String tag = "AndList";
@@ -54,18 +63,90 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 	}
 
 	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		super.onContextItemSelected(item);
+
+		switch (item.getItemId()) {
+		case CONTEXT_MENU_ITEM_DELETE:             	
+			showDialog(DIALOG_CREATE_DIR);
+			return true;
+		case CONTEXT_MENU_ITEM_SEND: //TODO : 젭라..
+			return true;
+		case CONTEXT_MENU_ITEM_PLAY:
+			Intent i_Play = new Intent(this, FsPlay.class);
+			// 경로값 Value로 넣어주삼
+			//			i_Play.putExtra("Vfile_Path", Value );
+			startActivity(i_Play);
+		}
+		return false;
+	}	
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		pathEdit.setText(unit.getAndroidPath());
 		unit.setTurn(AND);
 		unit.step(STEP_SHOW_DIR);
 
-		ArrayAdapter<String> adList = new ArrayAdapter<String>(this,                 
-				android.R.layout.simple_list_item_1, arrayAndList);  
+		ArrayList<String> adList = new ArrayList<String>();
+		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, adList); 
+		setListAdapter(adList_adpt); 
+		
+		ListView con_List = getListView();
 
-		setListAdapter(adList);          
+		con_List.setOnCreateContextMenuListener(new OnCreateContextMenuListener() { 
+			@Override
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
+				AdapterView.AdapterContextMenuInfo info;
+				try {
+					info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+				} catch (ClassCastException e) {
+					Log.e(tag, "bad menuInfo", e);
+					return;
+				}
+				menu.setHeaderTitle("CONTEXT_MENU");
+
+				menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.delete);
+				menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
+				//파일명이 동영상 관련 끝나면 
+				//if (파일명  == ".mp4" || )이런식?
+				menu.add(0, CONTEXT_MENU_ITEM_PLAY, 0, R.string.play );
+				
+			}});
 
 	}
+	
+	//fsList랑 여기랑 둘다 파일 이름이 표시가 안되삼
+	private class adListAdapter extends ArrayAdapter<String> {
+		private ArrayList<String> list_item;
+		
+		public adListAdapter (Context context, int textViewResourceId, ArrayList<String> items) {
+			super(context, textViewResourceId, items); 
+			this.list_item = items; 
+		}		
+        
+        public View getView(int position, View convertView, ViewGroup parent) {
+                View cView = convertView;
+                if (cView == null) {
+                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    cView = vi.inflate(R.layout.list_row, null);
+                }
+                String po = list_item.get(position);
+                if ( po != null) {
+                        ImageView icon = (ImageView) cView.findViewById(R.id.file_image);
+                        TextView name = (TextView) cView.findViewById(R.id.file_name);
+                        if (icon != null){
+                        	icon.setImageResource(R.drawable.folder);                           
+                        }
+                        if(name != null){
+                        		name.setText(po);
+                        }
+                }
+                return cView;
+        }
+	}
+
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {

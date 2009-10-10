@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
@@ -23,7 +25,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 
@@ -103,36 +107,7 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 			return ;
 		}		
 	}
-/*
-	// item을 누르고 있을 때의 메뉴
-	// setOnItemLongClickListener
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 
-		Log.d(tag, "onCreateContextMenu");
-		AdapterView.AdapterContextMenuInfo info;
-		try {
-			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		} catch (ClassCastException e) {
-			Log.e(tag, "bad menuInfo", e);
-			return;
-		}
-		
-
-//        Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
-//        if (cursor == null) {
-//        	Log.d(tag, "null");
-//            return;
-//        }
-		 
-		// Setup the menu header
-		menu.setHeaderTitle("CONTEXT_MENU");
-
-		menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.delete);
-		menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
-		
-	}
-*/
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -156,11 +131,15 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		unit.setTurn(FS);
 		unit.step(STEP_REQUEST_DIR); //request dir
 		Log.d(tag,"after step1");
-
+		
+		ArrayList<String> adList = new ArrayList<String>();
+		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, adList); 
+		setListAdapter(adList_adpt);
+/*
 		ArrayAdapter<String> adList = new ArrayAdapter<String>(this,                
 				android.R.layout.simple_list_item_1, arrayFsList); 
 		setListAdapter(adList);
-		
+*/		
 		ListView con_List = getListView();
 
 		con_List.setOnCreateContextMenuListener(new OnCreateContextMenuListener() { 
@@ -182,6 +161,35 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 
 
 		Log.d(tag,"" + arrayFsList.size() + unit.getServerPath());
+	}
+
+	private class adListAdapter extends ArrayAdapter<String> {
+		private ArrayList<String> list_item;
+		
+		public adListAdapter (Context context, int textViewResourceId, ArrayList<String> items) {
+			super(context, textViewResourceId, items); 
+			this.list_item = items; 
+		}		
+        
+        public View getView(int position, View convertView, ViewGroup parent) {
+                View cView = convertView;
+                if (cView == null) {
+                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    cView = vi.inflate(R.layout.list_row, null);
+                }
+                String po = list_item.get(position);
+                if ( po != null) {
+                        ImageView icon = (ImageView) cView.findViewById(R.id.file_image);
+                        TextView name = (TextView) cView.findViewById(R.id.file_name);
+                        if (icon != null){
+                        	icon.setImageResource(R.drawable.folder);                           
+                        }
+                        if(name != null){
+                        		name.setText(po);
+                        }
+                }
+                return cView;
+        }
 	}
 
 	@Override
