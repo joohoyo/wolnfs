@@ -79,17 +79,42 @@ public class Unit implements Constant {
 	}
 	
 	// 파일이든 디렉토리든 delete 하기
-	void delete() {
-		
+	void delete() {	
+
+
 		File f = null;
 		if (getTurn() == FS) {
-			f = new File(getServerPath());
-			setServerPath(f.getParent());
-			f.delete();			
+			BufferedReader in = null;
+			PrintWriter out = null;
+			try {			
+				sendSocket = new Socket(serverAddress, serverPortNumber);			
+				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
+				out.println("" + STEP_DELETE + " " + serverPath+"\n"); 
+				out.flush();
+				sendSocket.close();			
+			} catch(IOException e) {
+				Log.d(tag, "createdir err");
+				// do nothing
+			}
+			
+			String tempServerPath = getServerPath();
+			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);			
+			Log.d(tag,"indexofslash = " + indexOfSlash);
+			if (indexOfSlash > 0) {
+				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
+			}
+			setServerPath(tempServerPath);
+			
+			requestDir();
 		}
 		else {
 			f = new File(getAndroidPath());
+			setAndroidPath(f.getParent());
+			f.delete();
+			
+			showDir();
 		}
+
 	}
 
 	// Android 디렉토리 list 보여주기 
