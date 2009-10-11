@@ -17,8 +17,8 @@ public interface Constant {
 	public int CONTEXT_MENU_ITEM_COPY = Menu.FIRST + 1;
 	public int CONTEXT_MENU_ITEM_PLAY = Menu.FIRST + 2;
 	
-	public int DIALOG_CREATE_DIR = 1;
-	public int DIALOG_DELETE = 2;
+	public int DIALOG_CREATE_DIR = 11;
+	public int DIALOG_DELETE = 22;
 
 	//STEP
 	public int STEP_INIT = 0;	

@@ -86,8 +86,9 @@ class ServerApp {
 
 			//testcode
 			System.out.println("strFromAndroid.length = " + strFromAndroid.length);
-			for(int i=0;i<strFromAndroid.length;i++)
+			for(int i=0;i<strFromAndroid.length;i++) 
 				System.out.println(strFromAndroid[i]);
+				
 			System.out.println("----------");
 			try {
 				Thread.sleep(3000);
@@ -107,6 +108,9 @@ class ServerApp {
 			case STEP_COPY_FILE:
 				fileTransfer(strFromAndroid[1]);
 				break;
+			case STEP_DELETE:
+				delete(strFromAndroid[1]);
+				break;
 			case STEP_CREATE_DIR:
 				createDir(strFromAndroid[1]);
 				break;			
@@ -123,7 +127,11 @@ class ServerApp {
 		File f = new File(dirName);
 		f.mkdir();
 	}
-
+	void delete(String str) {
+		File f = new File(str);		
+		f.delete();		
+	}
+	
 	void dirList(String dirName) {		
 		File [] file = (new File(dirName)).listFiles();
 
@@ -150,10 +158,11 @@ class ServerApp {
 			e.printStackTrace();
 		}
 	}
-
+	
 	void fileTransfer(String fileName) {
 
 	}
+
 }
 
 public class Server {

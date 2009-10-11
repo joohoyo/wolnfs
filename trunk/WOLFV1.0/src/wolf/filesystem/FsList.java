@@ -148,8 +148,6 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 		
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		
-		
-			
 
 		switch (item.getItemId()) {
 		case CONTEXT_MENU_ITEM_DELETE:             	//TODO : delete도 해야됨
@@ -229,9 +227,8 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			
 			textView.setText(unit.getServerPath() + strSeleted);
 			
-
 			return new AlertDialog.Builder(this)
-			.setTitle(R.string.menu_create_dir).setView(view)
+			.setTitle(R.string.context_menu_delete).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
 				@Override
@@ -252,8 +249,9 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			
 
 		}
-
-		return super.onCreateDialog(id);
+		
+		return null;
+		//return super.onCreateDialog(id);
 	}
 	// Menu 부분 끝	
 
