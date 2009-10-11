@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 
-public class FsList extends ListActivity implements OnClickListener, Constant {
+public class FsList extends ListActivity implements OnClickListener, OnCreateContextMenuListener, Constant {
 	private static final String tag = "FsList";
 
 	//public
@@ -42,7 +42,7 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 	public static int fsDirCount = 0;
 	public static ArrayList<String> arrayFsList = new ArrayList<String>();
 	public static ArrayList<String> arrayFiles = new ArrayList<String>();
-
+	
 	//private
 	//private static final int ACTIVITY_DIR = 0;	
 	private Unit unit = new Unit();
@@ -69,14 +69,30 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		Button upButton = (Button) findViewById(R.id.FS_Button_DIRUP);
 		upButton.setOnClickListener(this);
 		
-		//context Listener
-
+		//ContextMenu(LongClick) Listener
+		registerForContextMenu(getListView());
 		
 
 		//에디트 박스
 		pathEdit = (EditText) findViewById(R.id.FS_EditText_DIR);		
 	}
-
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(tag,"onResume");		
+		pathEdit.setText(unit.getServerPath());
+		unit.setTurn(FS);
+		unit.step(STEP_REQUEST_DIR); //request dir
+		Log.d(tag,"after step1");
+	
+		//목록 갱신
+		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, arrayFsList);		
+		setListAdapter(adList_adpt);
+		
+		Log.d(tag,"" + arrayFsList.size() + unit.getServerPath());
+	}
+	
 	//onClick method : 경로만 보이게 설정 해 놓음 
 	public void onClick(View v){
 		String tempServerPath = pathEdit.getText().toString();
@@ -96,7 +112,6 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		}	
 		onResume();
 	}
-
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -107,91 +122,48 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 			return ;
 		}		
 	}
+	
 
+
+
+	//ContextMenu 시작 
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterView.AdapterContextMenuInfo info;
+		try {
+			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		} catch (ClassCastException e) {
+			Log.e(tag, "bad menuInfo", e);
+			return;
+		}
+		menu.setHeaderTitle("CONTEXT_MENU");
+
+		menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.context_menu_delete);
+		menu.add(0, CONTEXT_MENU_ITEM_COPY, 0, R.string.context_menu_copy);		
+	}
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		super.onContextItemSelected(item);
+		
+		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		
+		
+			
 
 		switch (item.getItemId()) {
-		case CONTEXT_MENU_ITEM_DELETE:             	
-			showDialog(DIALOG_CREATE_DIR);
+		case CONTEXT_MENU_ITEM_DELETE:             	//TODO : delete도 해야됨
+			showDialog(DIALOG_DELETE);
 			return true;
-		case CONTEXT_MENU_ITEM_SEND: //TODO : 젭라..
+		case CONTEXT_MENU_ITEM_COPY: //TODO : 젭라..
+			unit.copyFile();
 			return true;
 		}
 		return false;
 	}
+	//ContextMenu 끝
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.d(tag,"onResume");		
-		pathEdit.setText(unit.getServerPath());
-		unit.setTurn(FS);
-		unit.step(STEP_REQUEST_DIR); //request dir
-		Log.d(tag,"after step1");
-		
-		ArrayList<String> adList = new ArrayList<String>();
-		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, adList); 
-		setListAdapter(adList_adpt);
-/*
-		ArrayAdapter<String> adList = new ArrayAdapter<String>(this,                
-				android.R.layout.simple_list_item_1, arrayFsList); 
-		setListAdapter(adList);
-*/		
-		ListView con_List = getListView();
-
-		con_List.setOnCreateContextMenuListener(new OnCreateContextMenuListener() { 
-			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
-				AdapterView.AdapterContextMenuInfo info;
-				try {
-					info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-				} catch (ClassCastException e) {
-					Log.e(tag, "bad menuInfo", e);
-					return;
-				}
-				menu.setHeaderTitle("CONTEXT_MENU");
-
-				menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.delete);
-				menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
-				
-			}});
-
-
-		Log.d(tag,"" + arrayFsList.size() + unit.getServerPath());
-	}
-
-	private class adListAdapter extends ArrayAdapter<String> {
-		private ArrayList<String> list_item;
-		
-		public adListAdapter (Context context, int textViewResourceId, ArrayList<String> items) {
-			super(context, textViewResourceId, items); 
-			this.list_item = items; 
-		}		
-        
-        public View getView(int position, View convertView, ViewGroup parent) {
-                View cView = convertView;
-                if (cView == null) {
-                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    cView = vi.inflate(R.layout.list_row, null);
-                }
-                String po = list_item.get(position);
-                if ( po != null) {
-                        ImageView icon = (ImageView) cView.findViewById(R.id.file_image);
-                        TextView name = (TextView) cView.findViewById(R.id.file_name);
-                        if (icon != null){
-                        	icon.setImageResource(R.drawable.folder);                           
-                        }
-                        if(name != null){
-                        		name.setText(po);
-                        }
-                }
-                return cView;
-        }
-	}
-
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();		
@@ -202,11 +174,10 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_CREATE_DIR, 0, R.string.create_dir);
+		menu.add(0, MENU_CREATE_DIR, 0, R.string.menu_create_dir);
 
 		return true;
 	}
-
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch(item.getItemId()) {		
@@ -216,17 +187,21 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View view = null;
+
+		
 		switch(id) {
-		case DIALOG_CREATE_DIR:			
-			LayoutInflater inflater = LayoutInflater.from(this);
-			View view = inflater.inflate(R.layout.create_dir, null);
-			final EditText editText = (EditText) view.findViewById(R.id.EditText_NEWDIR);
-			editText.setText("");
+		case DIALOG_CREATE_DIR:
+			view = inflater.inflate(R.layout.create_dir, null);
+			final EditText editText = (EditText) view.findViewById(R.id.Dialog_EditText_NEWDIR);
+			editText.setText("");			
+			
 			return new AlertDialog.Builder(this)
-			.setTitle(R.string.create_dir).setView(view)
+			.setTitle(R.string.menu_create_dir).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
 				@Override
@@ -244,8 +219,37 @@ public class FsList extends ListActivity implements OnClickListener, Constant {
 					// do nothing						
 				}					
 			}).create();
-			//case DIALOG_DELETE_DIR:
 
+		case DIALOG_DELETE:
+			view = inflater.inflate(R.layout.delete, null);
+			TextView textView = (TextView) view.findViewById(R.id.Dialog_TextView_delete);
+			
+			ListView l = getListView();
+			final String strSeleted = arrayFsList.get(l.getSelectedItemPosition());
+			
+			textView.setText(unit.getServerPath() + strSeleted);
+			
+
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.menu_create_dir).setView(view)
+			.setPositiveButton(android.R.string.ok, 
+					new android.content.DialogInterface.OnClickListener() {						
+				@Override
+				public void onClick(DialogInterface dialog, int which) {							
+					unit.setServerPath(unit.getServerPath() + strSeleted);
+					unit.step(STEP_DELETE);
+					onResume();
+					Log.d(tag,"alert dialog");							
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, 
+					new android.content.DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// do nothing						
+				}					
+			}).create();
+			
 
 		}
 

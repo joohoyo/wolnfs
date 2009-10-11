@@ -32,12 +32,19 @@ class ServerApp {
 	private ServerSocket serverSocket = null;	
 	private InetAddress androidAddress = null;
 
-	private int STEP_INIT = 0;
-	private final int STEP_REQUEST_DIR = 10;	
-	private final int STEP_CREATE_DIR = 11;
-	private final int STEP_REQUEST_FILE = 2;
-	
-	public int STEP_CLOSE = 5;
+	//STEP
+	private final int STEP_INIT = 0;
+	// Android, Server 
+	private final int STEP_DELETE = 10;
+	// Android -> Server
+	private final int STEP_REQUEST_DIR = 20;	
+	private final int STEP_CREATE_DIR = 21;
+	// Android -> Android
+	private final int STEP_SHOW_DIR = 30;
+	// Server <-> Android
+	private final int STEP_COPY_FILE = 40;
+	// Close
+	private final int STEP_CLOSE = 50;
 
 	public ServerApp() {
 		initSocket(); //once
@@ -97,7 +104,7 @@ class ServerApp {
 			case STEP_REQUEST_DIR:
 				dirList(strFromAndroid[1]);
 				break;
-			case STEP_REQUEST_FILE:
+			case STEP_COPY_FILE:
 				fileTransfer(strFromAndroid[1]);
 				break;
 			case STEP_CREATE_DIR:

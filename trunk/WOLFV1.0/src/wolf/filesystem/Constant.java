@@ -14,7 +14,7 @@ public interface Constant {
 	public int MENU_CREATE_DIR = Menu.FIRST;
 	
 	public int CONTEXT_MENU_ITEM_DELETE = Menu.FIRST;
-	public int CONTEXT_MENU_ITEM_SEND = Menu.FIRST + 1;
+	public int CONTEXT_MENU_ITEM_COPY = Menu.FIRST + 1;
 	public int CONTEXT_MENU_ITEM_PLAY = Menu.FIRST + 2;
 	
 	public int DIALOG_CREATE_DIR = 1;
@@ -23,19 +23,22 @@ public interface Constant {
 	//STEP
 	public int STEP_INIT = 0;	
 	
+	// Android, Server 
+	public int STEP_DELETE = 10;
+	
 	// Android -> Server
-	public int STEP_REQUEST_DIR = 10;	
-	public int STEP_CREATE_DIR = 11;
+	public int STEP_REQUEST_DIR = 20;	
+	public int STEP_CREATE_DIR = 21;
 	
 	// Android -> Android
-	public int STEP_SHOW_DIR = 20;   
+	public int STEP_SHOW_DIR = 30;   
 	
 	
-	// Server -> Android
-	public int STEP_COPY_FILE = 3;
+	// Server <-> Android
+	public int STEP_COPY_FILE = 40;
 	
 
-	public int STEP_CLOSE = 5;
+	public int STEP_CLOSE = 50;
 	
 	
 }

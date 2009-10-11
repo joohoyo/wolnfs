@@ -5,15 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView           	
+    <TextView
+    	android:text="@string/context_menu_delete"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"        
-        android:text="@string/menu_create_dir"
         android:gravity="left"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+        
             
-    <EditText
-        android:id="@+id/Dialog_EditText_NEWDIR"
+    <TextView
+        android:id="@+id/Dialog_TextView_delete"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:scrollHorizontally="true"
