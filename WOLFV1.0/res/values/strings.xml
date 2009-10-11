@@ -36,10 +36,10 @@
     <string name="dir_up">↑</string>
     <string name="OK"> OK </string>
     
-    <string name="create_dir">Create DIR</string>
-    <string name="delete">Delete</string>
-    <string name="send">Send</string>
-    <string name="play">Play</string>
+    <string name="menu_create_dir">Create DIR</string>
+    <string name="context_menu_delete">Delete</string>
+    <string name="context_menu_copy">Copy</string>
+    <string name="context_menu_play">Play</string>
     
     
     

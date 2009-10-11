@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class AndList extends ListActivity implements OnClickListener, Constant {
+public class AndList extends ListActivity implements OnClickListener, OnCreateContextMenuListener, Constant {
 	private static final String tag = "AndList";
 
 	//public
@@ -57,11 +57,46 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 
 		Button upButton = (Button) findViewById(R.id.AND_Button_DIRUP);
 		upButton.setOnClickListener(this);
-
+		
+		//ContextMenu(LongClick) Listener
+		registerForContextMenu(getListView());
+		
 		//에디트 박스
 		pathEdit = (EditText) findViewById(R.id.AND_EditText_DIR);
 	}
 
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		pathEdit.setText(unit.getAndroidPath());
+		unit.setTurn(AND);
+		unit.step(STEP_SHOW_DIR);
+
+		
+		//목록 갱신
+		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, arrayAndList);
+		setListAdapter(adList_adpt);		
+
+	}
+	
+	//ContextMenu 시작 
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterView.AdapterContextMenuInfo info;
+		try {
+			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		} catch (ClassCastException e) {
+			Log.e(tag, "bad menuInfo", e);
+			return;
+		}
+		menu.setHeaderTitle("CONTEXT_MENU");
+
+		menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.context_menu_delete);
+		menu.add(0, CONTEXT_MENU_ITEM_COPY, 0, R.string.context_menu_copy);		
+	}
+	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -71,7 +106,7 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 		case CONTEXT_MENU_ITEM_DELETE:             	
 			showDialog(DIALOG_CREATE_DIR);
 			return true;
-		case CONTEXT_MENU_ITEM_SEND: //TODO : 젭라..
+		case CONTEXT_MENU_ITEM_COPY: //TODO : 젭라..
 			return true;
 		case CONTEXT_MENU_ITEM_PLAY:
 			Intent i_Play = new Intent(this, FsPlay.class);
@@ -81,88 +116,16 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 		}
 		return false;
 	}	
+	//ContextMenu 끝
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		pathEdit.setText(unit.getAndroidPath());
-		unit.setTurn(AND);
-		unit.step(STEP_SHOW_DIR);
-
-		ArrayList<String> adList = new ArrayList<String>();
-		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, adList); 
-		setListAdapter(adList_adpt); 
-		
-		ListView con_List = getListView();
-
-		con_List.setOnCreateContextMenuListener(new OnCreateContextMenuListener() { 
-			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
-				AdapterView.AdapterContextMenuInfo info;
-				try {
-					info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-				} catch (ClassCastException e) {
-					Log.e(tag, "bad menuInfo", e);
-					return;
-				}
-				menu.setHeaderTitle("CONTEXT_MENU");
-
-				menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.delete);
-				menu.add(0, CONTEXT_MENU_ITEM_SEND, 0, R.string.send);
-				//파일명이 동영상 관련 끝나면 
-				//if (파일명  == ".mp4" || )이런식?
-				menu.add(0, CONTEXT_MENU_ITEM_PLAY, 0, R.string.play );
-				
-			}});
-
-	}
 	
-	//fsList랑 여기랑 둘다 파일 이름이 표시가 안되삼
-	private class adListAdapter extends ArrayAdapter<String> {
-		private ArrayList<String> list_item;
-		
-		public adListAdapter (Context context, int textViewResourceId, ArrayList<String> items) {
-			super(context, textViewResourceId, items); 
-			this.list_item = items; 
-		}		
-        
-        public View getView(int position, View convertView, ViewGroup parent) {
-                View cView = convertView;
-                if (cView == null) {
-                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    cView = vi.inflate(R.layout.list_row, null);
-                }
-                String po = list_item.get(position);
-                if ( po != null) {
-                        ImageView icon = (ImageView) cView.findViewById(R.id.file_image);
-                        TextView name = (TextView) cView.findViewById(R.id.file_name);
-                        if (icon != null){
-                        	icon.setImageResource(R.drawable.folder);                           
-                        }
-                        if(name != null){
-                        		name.setText(po);
-                        }
-                }
-                return cView;
-        }
-	}
 
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		Log.d(tag,"position = " + position);
-		if (position < andDirCount) {
-			unit.setAndroidPath(unit.getAndroidPath() + arrayAndList.get(position));			
-			onResume();
-			return ;
-		}		
-	}
+	
 	// Menu 부분 시작
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_CREATE_DIR, 0, R.string.create_dir);
+		menu.add(0, MENU_CREATE_DIR, 0, R.string.menu_create_dir);
 
 		return true;
 	}
@@ -181,10 +144,10 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 		case DIALOG_CREATE_DIR:			
 			LayoutInflater inflater = LayoutInflater.from(this);
 			View view = inflater.inflate(R.layout.create_dir, null);
-			final EditText editText = (EditText) view.findViewById(R.id.EditText_NEWDIR);
+			final EditText editText = (EditText) view.findViewById(R.id.Dialog_EditText_NEWDIR);
 			editText.setText("");
 			return new AlertDialog.Builder(this)
-			.setTitle(R.string.create_dir).setView(view)
+			.setTitle(R.string.menu_create_dir).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
 				@Override
@@ -227,6 +190,16 @@ public class AndList extends ListActivity implements OnClickListener, Constant {
 		}
 		onResume();
 	}	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		Log.d(tag,"position = " + position);
+		if (position < andDirCount) {
+			unit.setAndroidPath(unit.getAndroidPath() + arrayAndList.get(position));			
+			onResume();
+			return ;
+		}		
+	}
 
 	public static void clear() {
 		andDirCount = 0;	

@@ -47,7 +47,11 @@ public class Unit implements Constant {
 		case STEP_INIT:
 			init();
 			break;
-
+		// Android, Server
+		case STEP_DELETE:
+			delete();
+			break;
+			
 		// Android -> Server
 		case STEP_REQUEST_DIR:
 			requestDir();
@@ -61,14 +65,31 @@ public class Unit implements Constant {
 			showDir();
 			break;
 
-		// Server -> Android
+		// Server <-> Android
 		case STEP_COPY_FILE:
 			copyFile();
-			break;			
+			break;
+			
+			
+		
 
 		case STEP_CLOSE:
 			close();
 		}		
+	}
+	
+	// 파일이든 디렉토리든 delete 하기
+	void delete() {
+		
+		File f = null;
+		if (getTurn() == FS) {
+			f = new File(getServerPath());
+			setServerPath(f.getParent());
+			f.delete();			
+		}
+		else {
+			f = new File(getAndroidPath());
+		}
 	}
 
 	// Android 디렉토리 list 보여주기 
