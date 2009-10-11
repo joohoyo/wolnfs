@@ -1,12 +1,11 @@
 package wolf.filesystem;
 
 import java.util.ArrayList;
+
 import wolf.project.R;
-import wolf.project.woltest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,17 +15,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class AndList extends ListActivity implements OnClickListener, OnCreateContextMenuListener, Constant {
 	private static final String tag = "AndList";
@@ -43,7 +40,8 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 	private static final int ACTIVITY_DIR = 0;
 	private EditText pathEdit = null;
 	private Unit unit = new Unit();
-
+	private String listItemSeleted = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,6 +83,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		AdapterView.AdapterContextMenuInfo info;
+			
 		try {
 			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		} catch (ClassCastException e) {
@@ -98,13 +97,14 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 	}
 	
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+	public boolean onContextItemSelected(MenuItem item) {		
 		super.onContextItemSelected(item);
-
+		
+		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		listItemSeleted = arrayAndList.get(menuInfo.position);
 		switch (item.getItemId()) {
 		case CONTEXT_MENU_ITEM_DELETE:             	
-			showDialog(DIALOG_CREATE_DIR);
+			showDialog(DIALOG_DELETE);
 			return true;
 		case CONTEXT_MENU_ITEM_COPY: //TODO : Á«¶ó..
 			return true;
@@ -143,7 +143,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 		switch(id) {
 		case DIALOG_CREATE_DIR:			
 			LayoutInflater inflater = LayoutInflater.from(this);
-			View view = inflater.inflate(R.layout.create_dir, null);
+			View view = inflater.inflate(R.layout.menu_create_dir, null);
 			final EditText editText = (EditText) view.findViewById(R.id.Dialog_EditText_NEWDIR);
 			editText.setText("");
 			return new AlertDialog.Builder(this)
@@ -165,7 +165,33 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 					// do nothing						
 				}					
 			}).create();
-			//case DIALOG_DELETE_DIR:
+			
+		case DIALOG_DELETE:
+			inflater = LayoutInflater.from(this);
+			view = inflater.inflate(R.layout.menu_delete, null);
+			TextView textView = (TextView) view.findViewById(R.id.Dialog_TextView_delete);
+			
+			textView.setText(unit.getAndroidPath() + listItemSeleted);
+			
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.context_menu_delete).setView(view)
+			.setPositiveButton(android.R.string.ok, 
+					new android.content.DialogInterface.OnClickListener() {						
+				@Override
+				public void onClick(DialogInterface dialog, int which) {							
+					unit.setAndroidPath(unit.getAndroidPath() + listItemSeleted);
+					unit.step(STEP_DELETE);
+					onResume();
+					Log.d(tag,"alert dialog");							
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, 
+					new android.content.DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// do nothing						
+				}					
+			}).create();
 		}
 		return super.onCreateDialog(id);
 	}
