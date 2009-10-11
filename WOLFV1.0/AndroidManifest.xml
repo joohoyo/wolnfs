@@ -44,11 +44,7 @@
 		</activity>
 		
 		// 이거 쓸모 없는듯? 		
-		<activity
-			android:name="wolf.filesystem.FsDir"			
-			android:label="@string/dir_colone"
-			android:theme="@android:style/Theme.Dialog">			
-		</activity>
+		
 		
 		<activity 
 			android:name="wolf.filesystem.FsTabView">	

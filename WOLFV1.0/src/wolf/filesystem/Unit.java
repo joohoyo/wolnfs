@@ -29,8 +29,8 @@ import android.widget.ArrayAdapter;
 public class Unit implements Constant {
 	private static final String tag = "FsUnit";
 
-	private String androidPath = "/";
-	private String serverPath = "C:\\";
+	private static String androidPath = "/";
+	private static String serverPath = "C:\\";
 
 	private int stepNumber;
 	private static int onRunning = 0;
@@ -104,15 +104,12 @@ public class Unit implements Constant {
 				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
 			}
 			setServerPath(tempServerPath);
-			
-			requestDir();
 		}
 		else {
+			Log.d("unit.delete",getAndroidPath());
 			f = new File(getAndroidPath());
 			setAndroidPath(f.getParent());
-			f.delete();
-			
-			showDir();
+			f.delete();			
 		}
 
 	}
@@ -136,9 +133,13 @@ public class Unit implements Constant {
 		AndList.arrayAndList.addAll(AndList.arrayAndFiles); 
 	}
 
-
-	// TODO : 양측 전송 동시에 할 수 있나
 	void copyFile() {
+		switch(turn) {
+		case FS:
+			break;
+		case AND:
+			break;			
+		}
 		BufferedReader in = null;
 		PrintWriter out = null;
 		try {			
@@ -147,6 +148,32 @@ public class Unit implements Constant {
 			out.println("" + STEP_COPY_FILE + " " + serverPath+"\n"); 
 			out.flush();
 			sendSocket.close();			
+
+			String tempServerPath = getServerPath();  //파일명 제거
+			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);			
+			Log.d(tag,"indexofslash = " + indexOfSlash);
+			if (indexOfSlash > 0) {
+				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
+			}
+			setServerPath(tempServerPath);
+			
+			// receiveSocket으로 대기
+			receiveSocket = androidSocket.accept();
+			Log.d(tag,"accept");
+			in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));	
+			String strFileName = in.readLine();
+
+			Log.d(tag,"and : " + getAndroidPath() + "   " + "strFileName : " + strFileName);
+			File f = new File(getAndroidPath() + strFileName);
+			f.createNewFile();
+			Log.d(tag,"2");
+			out = new PrintWriter(f);			
+			int c = 0;
+			while((c = in.read()) != -1) // 파일 쓰기
+				out.write(c);
+			out.flush();
+			receiveSocket.close();
+			Log.d(tag,"filetransferend");
 		} catch(IOException e) {
 			Log.d(tag, "createdir err");
 			// do nothing
@@ -216,7 +243,7 @@ public class Unit implements Constant {
 			} catch(IOException e) {
 				Log.e(tag, "createdir err");
 				// do nothing
-			}		
+			}
 		}
 		else {
 			File f = new File(androidPath);

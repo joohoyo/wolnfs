@@ -51,25 +51,18 @@
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content" 
 					android:text="@string/ip_list" />
-
 				<Button 
-					android:id="@+id/ipset_button" 
+					android:id="@+id/connect_button" 
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content" 
-					android:text="@string/ip_set" />
+					android:text="@string/connect" />
 			</TableRow>
-			<TableRow>
+			<TableRow>				
 				<Button 
 					android:id="@+id/about_button" 
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content" 
-					android:text="@string/about" />
-
-				<Button 
-					android:id="@+id/fstest_button" 
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" 
-					android:text="@string/fstest" />
+					android:text="@string/about" />				
 			</TableRow>
 		</TableLayout>
 	</LinearLayout>

@@ -8,20 +8,15 @@
 
 package wolf.server;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -128,7 +123,8 @@ class ServerApp {
 		f.mkdir();
 	}
 	void delete(String str) {
-		File f = new File(str);		
+		File f = new File(str);
+		System.out.println(str);
 		f.delete();		
 	}
 	
@@ -136,7 +132,9 @@ class ServerApp {
 		File [] file = (new File(dirName)).listFiles();
 
 		try {
-			Socket sendSocket = new Socket(androidAddress, androidPortNumber);
+			Socket sendSocket = null;
+			while(sendSocket == null) 
+				sendSocket = new Socket(androidAddress, androidPortNumber);
 			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
 
 			System.out.println("sendSocket.toString = " + sendSocket.toString());
@@ -160,6 +158,31 @@ class ServerApp {
 	}
 	
 	void fileTransfer(String fileName) {
+		File f = new File(fileName);
+		
+		try {
+			Socket sendSocket = new Socket(androidAddress, androidPortNumber);
+			Reader in = new FileReader(f);	
+			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
+
+			System.out.println("sendSocket.toString = " + sendSocket.toString());
+
+			out.println(f.getName());
+			out.flush();
+			
+			int c = 0;
+			while(( c = in.read()) != -1) //파일 읽고 보내기 
+				out.write(c);
+			out.flush();
+			
+			sendSocket.close();
+			System.out.println("filetranfer end");
+		} catch (IOException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 	}
 

@@ -24,13 +24,12 @@ public class WOLF extends Activity implements OnClickListener {
 
 		View iplistButton = this.findViewById(R.id.iplist_button);
 		iplistButton.setOnClickListener(this);
-		View ipsetButton = this.findViewById(R.id.ipset_button);
-		ipsetButton.setOnClickListener(this);
+		
 		View aboutButton = this.findViewById(R.id.about_button);
 		aboutButton.setOnClickListener(this);
 	
-		View fstestButton = this.findViewById(R.id.fstest_button);
-		fstestButton.setOnClickListener(this);
+		View connectButton = this.findViewById(R.id.connect_button);
+		connectButton.setOnClickListener(this);
 		
 	}
 
@@ -47,7 +46,7 @@ public class WOLF extends Activity implements OnClickListener {
 			startActivityForResult(j, ACTIVITY_SELECTED);
 			break;
 			
-		case R.id.fstest_button:
+		case R.id.connect_button:
 			if (selec_Ip_Address != null){
 				Intent i_woltest = new Intent(this, woltest.class);
 
