@@ -11,12 +11,12 @@ package wolf.server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -162,7 +162,7 @@ class ServerApp {
 		
 		try {
 			Socket sendSocket = new Socket(androidAddress, androidPortNumber);
-			Reader in = new FileReader(f);	
+			FileInputStream fis = new FileInputStream(f);
 			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
 
 			System.out.println("sendSocket.toString = " + sendSocket.toString());
@@ -171,10 +171,11 @@ class ServerApp {
 			out.flush();
 			
 			int c = 0;
-			while(( c = in.read()) != -1) //파일 읽고 보내기 
+			while(( c = fis.read()) != -1) //파일 읽고 보내기
+			{				
 				out.write(c);
+			}
 			out.flush();
-			
 			sendSocket.close();
 			System.out.println("filetranfer end");
 		} catch (IOException e) {

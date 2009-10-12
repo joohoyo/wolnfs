@@ -29,18 +29,15 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 	private static final String tag = "AndList";
 
 	//public
-	
-	//public static String fsList[] = "";
 	public static int andDirCount = 0;	
 	public static ArrayList<String> arrayAndList = new ArrayList<String>();
 	public static ArrayList<String> arrayAndFiles = new ArrayList<String>();
-
+	public static String listItemSelected = null;
 	
 	//private
-	private static final int ACTIVITY_DIR = 0;
 	private EditText pathEdit = null;
 	private Unit unit = new Unit();
-	private String listItemSeleted = null;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +98,13 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 		super.onContextItemSelected(item);
 		
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		listItemSeleted = arrayAndList.get(menuInfo.position);
+		listItemSelected = arrayAndList.get(menuInfo.position);
 		switch (item.getItemId()) {
 		case CONTEXT_MENU_ITEM_DELETE:             	
 			showDialog(DIALOG_DELETE);
 			return true;
 		case CONTEXT_MENU_ITEM_COPY: //TODO : 젭라..
+			showDialog(DIALOG_COPY);
 			return true;
 		case CONTEXT_MENU_ITEM_PLAY:
 			Intent i_Play = new Intent(this, FsPlay.class);
@@ -171,7 +169,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 			view = inflater.inflate(R.layout.menu_delete, null);
 			TextView textView = (TextView) view.findViewById(R.id.Dialog_TextView_delete);
 			
-			textView.setText(unit.getAndroidPath() + listItemSeleted);
+			textView.setText(unit.getAndroidPath() + listItemSelected);
 			
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.context_menu_delete).setView(view)
@@ -179,7 +177,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 					new android.content.DialogInterface.OnClickListener() {						
 				@Override
 				public void onClick(DialogInterface dialog, int which) {							
-					unit.setAndroidPath(unit.getAndroidPath() + listItemSeleted);
+					unit.setAndroidPath(unit.getAndroidPath() + listItemSelected);
 					unit.step(STEP_DELETE);
 					onResume();
 					Log.d(tag,"alert dialog");							
@@ -192,9 +190,63 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 					// do nothing						
 				}					
 			}).create();
+			
+		case DIALOG_COPY:
+			inflater = LayoutInflater.from(this);
+			view = inflater.inflate(R.layout.menu_copy, null);
+			TextView tvCopyFrom = (TextView) view.findViewById(R.id.Dialog_TextView_copyfrom);
+			TextView tvCopyTo = (TextView) view.findViewById(R.id.Dialog_TextView_copyto);
+			/*
+			tvCopyFrom.setText(unit.getServerPath() + listItemSeleted);
+			tvCopyTo.setText(unit.getAndroidPath());
+			*/
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.context_menu_copy).setView(view)
+			.setPositiveButton(android.R.string.ok, 
+					new android.content.DialogInterface.OnClickListener() {						
+				@Override
+				public void onClick(DialogInterface dialog, int which) {							
+					//unit.setAndroidPath(unit.getAndroidPath() + listItemSelected);
+					unit.step(STEP_COPY_FROM_ANDROID);
+					
+					onResume();
+					Log.d(tag,"copy alert dialog");							
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, 
+					new android.content.DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// do nothing						
+				}					
+			}).create();
+
 		}
 		return super.onCreateDialog(id);
 	}
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		
+		switch (id) {
+		case DIALOG_CREATE_DIR:
+			EditText et = (EditText) dialog.findViewById(R.id.Dialog_EditText_NEWDIR);
+			et.setText("");
+			break;
+
+		case DIALOG_DELETE:
+			TextView textView = (TextView) dialog.findViewById(R.id.Dialog_TextView_delete);
+			textView.setText(unit.getServerPath() + listItemSelected);			
+			break;			
+		case DIALOG_COPY:
+			TextView tvCopyFrom = (TextView) dialog.findViewById(R.id.Dialog_TextView_copyfrom);
+			TextView tvCopyTo = (TextView) dialog.findViewById(R.id.Dialog_TextView_copyto);
+			tvCopyFrom.setText(unit.getAndroidPath() + listItemSelected);
+			tvCopyTo.setText(unit.getServerPath());			
+			break;
+		}
+	}
+
 	// Menu 부분 끝	
 
 	//onClick method : 경로만 보이게 설정 해 놓음

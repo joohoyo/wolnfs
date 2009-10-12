@@ -30,13 +30,13 @@ public interface Constant {
 	// Android -> Server
 	public int STEP_REQUEST_DIR = 20;	
 	public int STEP_CREATE_DIR = 21;
-	
+		
 	// Android -> Android
 	public int STEP_SHOW_DIR = 30;   
 	
-	
 	// Server <-> Android
-	public int STEP_COPY_FILE = 40;
+	public int STEP_COPY_FROM_SERVER = 40;
+	public int STEP_COPY_FROM_ANDROID = 41;
 	
 
 	public int STEP_CLOSE = 50;
