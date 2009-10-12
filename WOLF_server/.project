@@ -3,7 +3,6 @@
 	<name>WOLF_server</name>
 	<comment></comment>
 	<projects>
-		<project>WOLFV1.0</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

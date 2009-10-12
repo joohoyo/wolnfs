@@ -3,19 +3,20 @@ package wolf.filesystem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 import wolf.project.woltest;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 /*
  * 0. 초기화(tcp 설정)
@@ -29,7 +30,8 @@ import android.widget.ArrayAdapter;
 public class Unit implements Constant {
 	private static final String tag = "FsUnit";
 
-	private static String androidPath = "/";
+	
+	private static String androidPath = "/";	
 	private static String serverPath = "C:\\";
 
 	private int stepNumber;
@@ -66,8 +68,11 @@ public class Unit implements Constant {
 			break;
 
 		// Server <-> Android
-		case STEP_COPY_FILE:
+		case STEP_COPY_FROM_SERVER:
 			copyFile();
+			break;
+		case STEP_COPY_FROM_ANDROID:
+			saveFile();
 			break;
 			
 			
@@ -133,46 +138,37 @@ public class Unit implements Constant {
 		AndList.arrayAndList.addAll(AndList.arrayAndFiles); 
 	}
 
+	void saveFile() {
+		
+	}
 	void copyFile() {
-		switch(turn) {
-		case FS:
-			break;
-		case AND:
-			break;			
-		}
 		BufferedReader in = null;
 		PrintWriter out = null;
 		try {			
 			sendSocket = new Socket(serverAddress, serverPortNumber);			
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
-			out.println("" + STEP_COPY_FILE + " " + serverPath+"\n"); 
+			out.println("" + STEP_COPY_FROM_SERVER + " " + serverPath + FsList.listItemSelected +  "\n"); 
 			out.flush();
-			sendSocket.close();			
-
-			String tempServerPath = getServerPath();  //파일명 제거
-			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);			
-			Log.d(tag,"indexofslash = " + indexOfSlash);
-			if (indexOfSlash > 0) {
-				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
-			}
-			setServerPath(tempServerPath);
+			sendSocket.close();
 			
 			// receiveSocket으로 대기
 			receiveSocket = androidSocket.accept();
-			Log.d(tag,"accept");
+
 			in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));	
 			String strFileName = in.readLine();
 
-			Log.d(tag,"and : " + getAndroidPath() + "   " + "strFileName : " + strFileName);
 			File f = new File(getAndroidPath() + strFileName);
 			f.createNewFile();
-			Log.d(tag,"2");
-			out = new PrintWriter(f);			
+			
+			FileOutputStream fout = new FileOutputStream(f);
 			int c = 0;
 			while((c = in.read()) != -1) // 파일 쓰기
-				out.write(c);
-			out.flush();
+			{	
+				fout.write(c);
+			}
+			fout.flush();			
 			receiveSocket.close();
+
 			Log.d(tag,"filetransferend");
 		} catch(IOException e) {
 			Log.d(tag, "createdir err");
