@@ -20,6 +20,7 @@ public interface Constant {
 	public int DIALOG_CREATE_DIR = 1;
 	public int DIALOG_DELETE = 2;
 	public int DIALOG_COPY = 3;
+	public int DIALOG_ERROR_PLAY = 4;
 	
 	//STEP
 	public int STEP_INIT = 0;	

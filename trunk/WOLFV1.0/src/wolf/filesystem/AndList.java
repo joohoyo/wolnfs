@@ -90,7 +90,8 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 		menu.setHeaderTitle("CONTEXT_MENU");
 
 		menu.add(0, CONTEXT_MENU_ITEM_DELETE, 0, R.string.context_menu_delete);
-		menu.add(0, CONTEXT_MENU_ITEM_COPY, 0, R.string.context_menu_copy);		
+		menu.add(0, CONTEXT_MENU_ITEM_COPY, 0, R.string.context_menu_copy);
+		menu.add(0, CONTEXT_MENU_ITEM_PLAY, 0, R.string.context_menu_play);
 	}
 	
 	@Override
@@ -99,6 +100,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 		
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		listItemSelected = arrayAndList.get(menuInfo.position);
+				
 		switch (item.getItemId()) {
 		case CONTEXT_MENU_ITEM_DELETE:             	
 			showDialog(DIALOG_DELETE);
@@ -107,10 +109,15 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 			showDialog(DIALOG_COPY);
 			return true;
 		case CONTEXT_MENU_ITEM_PLAY:
-			Intent i_Play = new Intent(this, FsPlay.class);
-			// 경로값 Value로 넣어주삼
-			//			i_Play.putExtra("Vfile_Path", Value );
-			startActivity(i_Play);
+			if (listItemSelected.endsWith(".mp4")==true){
+				Intent i_Play = new Intent(this, FsPlay.class);
+				i_Play.putExtra("Vfile_Path", unit.getAndroidPath()+ listItemSelected);
+				startActivity(i_Play);
+			}
+			else{ 
+				showDialog(DIALOG_ERROR_PLAY);	
+			}
+				
 		}
 		return false;
 	}	
@@ -136,6 +143,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
@@ -220,7 +228,12 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 					// do nothing						
 				}					
 			}).create();
-
+		
+		case DIALOG_ERROR_PLAY:
+			AlertDialog.Builder playError = new AlertDialog.Builder(this);
+            playError.setTitle("PLAY ERROR");
+            playError.setMessage("This File can't Play");
+            return playError.create();
 		}
 		return super.onCreateDialog(id);
 	}
