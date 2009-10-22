@@ -8,12 +8,15 @@
 
 package wolf.server;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -71,8 +74,8 @@ class ServerApp {
 	void waitForAndroid() {  
 		try {
 			Socket receiveSocket = serverSocket.accept(); // wolf로부터 정보 대기중
-			androidAddress = receiveSocket.getInetAddress();
-			//androidAddress = InetAddress.getByName("127.0.0.1");	
+			//androidAddress = receiveSocket.getInetAddress();
+			androidAddress = InetAddress.getByName("127.0.0.1");	
 			System.out.println("접속자 정보 : " + receiveSocket.toString()); ////////
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));
@@ -85,13 +88,7 @@ class ServerApp {
 				System.out.println(strFromAndroid[i]);
 				
 			System.out.println("----------");
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				System.out.println("Thread.sleep error");
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			//testcode end
 
 
@@ -160,22 +157,36 @@ class ServerApp {
 	void fileTransfer(String fileName) {
 		File f = new File(fileName);
 		
-		try {
+		try {			
 			Socket sendSocket = new Socket(androidAddress, androidPortNumber);
-			FileInputStream fis = new FileInputStream(f);
-			PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
-
+			/*
+			BufferedReader br = new BufferedReader(
+								new FileReader(f));			
+			PrintWriter out = new PrintWriter(
+							new BufferedWriter(
+							new OutputStreamWriter(
+							sendSocket.getOutputStream())));
+			*/
+			DataInputStream dis = new DataInputStream(
+					new BufferedInputStream(
+					new FileInputStream(f)));
+			DataOutputStream dos = new DataOutputStream(
+					new BufferedOutputStream(
+					sendSocket.getOutputStream()));
 			System.out.println("sendSocket.toString = " + sendSocket.toString());
 
-			out.println(f.getName());
-			out.flush();
+			dos.writeBytes(f.getName()+"\n");			
 			
 			int c = 0;
-			while(( c = fis.read()) != -1) //파일 읽고 보내기
+			byte[] by = new byte[65535];
+			char[] ch = new char[65535];
+			while((c = dis.read(by)) != -1) //파일 읽고 보내기
 			{				
-				out.write(c);
-			}
-			out.flush();
+				System.out.println(c);
+				dos.write(by, 0, c);
+				
+			}			
+			dos.flush();
 			sendSocket.close();
 			System.out.println("filetranfer end");
 		} catch (IOException e) {

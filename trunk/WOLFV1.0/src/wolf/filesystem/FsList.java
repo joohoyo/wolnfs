@@ -207,7 +207,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			.setTitle(R.string.menu_create_dir).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {							
 					unit.setServerPath(unit.getServerPath() + editText.getText().toString());
 					unit.step(STEP_CREATE_DIR);
@@ -218,7 +218,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			})
 			.setNegativeButton(android.R.string.cancel, 
 					new android.content.DialogInterface.OnClickListener() {
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// do nothing						
 				}					
@@ -235,7 +235,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			.setTitle(R.string.context_menu_delete).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {							
 					unit.setServerPath(unit.getServerPath() + listItemSelected);
 					unit.step(STEP_DELETE);
@@ -245,7 +245,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			})
 			.setNegativeButton(android.R.string.cancel, 
 					new android.content.DialogInterface.OnClickListener() {
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// do nothing						
 				}					
@@ -264,7 +264,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			.setTitle(R.string.context_menu_copy).setView(view)
 			.setPositiveButton(android.R.string.ok, 
 					new android.content.DialogInterface.OnClickListener() {						
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {							
 					//unit.setServerPath(unit.getServerPath() + listItemSelected);
 					unit.step(STEP_COPY_FROM_SERVER);
@@ -274,7 +274,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			})
 			.setNegativeButton(android.R.string.cancel, 
 					new android.content.DialogInterface.OnClickListener() {
-				@Override
+				//@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// do nothing						
 				}					
