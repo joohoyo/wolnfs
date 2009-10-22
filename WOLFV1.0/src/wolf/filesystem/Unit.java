@@ -1,15 +1,17 @@
 package wolf.filesystem;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -149,24 +151,43 @@ public class Unit implements Constant {
 			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sendSocket.getOutputStream())));
 			out.println("" + STEP_COPY_FROM_SERVER + " " + serverPath + FsList.listItemSelected +  "\n"); 
 			out.flush();
+			out.close();
 			sendSocket.close();
 			
 			// receiveSocket으로 대기
 			receiveSocket = androidSocket.accept();
 
-			in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));	
-			String strFileName = in.readLine();
+			/*
+			in = new BufferedReader(
+			new InputStreamReader(
+			receiveSocket.getInputStream()));	
+			 */
+			DataInputStream dis = new DataInputStream(
+					new BufferedInputStream(
+					receiveSocket.getInputStream()));
+			
+			String strFileName = dis.readLine();
 
 			File f = new File(getAndroidPath() + strFileName);
 			f.createNewFile();
 			
-			FileOutputStream fout = new FileOutputStream(f);
+			/*
+			PrintWriter pw = new PrintWriter(
+							new BufferedWriter(
+							new FileWriter(f)));
+			*/
+			DataOutputStream dos = new DataOutputStream(
+					new BufferedOutputStream(
+					new FileOutputStream(f)));
 			int c = 0;
-			while((c = in.read()) != -1) // 파일 쓰기
-			{	
-				fout.write(c);
-			}
-			fout.flush();			
+			byte[] by = new byte[65535];
+			char[] ch = new char[65535];
+			while((c = dis.read(by)) != -1) // 파일 쓰기
+			{
+				Log.d(tag,"" + c);				
+				dos.write(by, 0, c);				
+			}			
+			dos.flush();			
 			receiveSocket.close();
 
 			Log.d(tag,"filetransferend");
