@@ -26,8 +26,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class AndList extends ListActivity implements OnClickListener, OnCreateContextMenuListener, Constant {
-	private static final String tag = "AndList";
-
 	//public
 	public static int andDirCount = 0;	
 	public static ArrayList<String> arrayAndList = new ArrayList<String>();
@@ -83,8 +81,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 			
 		try {
 			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		} catch (ClassCastException e) {
-			Log.e(tag, "bad menuInfo", e);
+		} catch (ClassCastException e) {			
 			return;
 		}
 		menu.setHeaderTitle("CONTEXT_MENU");
@@ -160,8 +157,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 				public void onClick(DialogInterface dialog, int which) {							
 					unit.setAndroidPath(unit.getAndroidPath() + editText.getText().toString());
 					unit.step(STEP_CREATE_DIR);
-					onResume();
-					Log.d(tag,"alert dialog");							
+					onResume();												
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -187,8 +183,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 				public void onClick(DialogInterface dialog, int which) {							
 					unit.setAndroidPath(unit.getAndroidPath() + listItemSelected);
 					unit.step(STEP_DELETE);
-					onResume();
-					Log.d(tag,"alert dialog");							
+					onResume();												
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -215,10 +210,8 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 				//@Override
 				public void onClick(DialogInterface dialog, int which) {							
 					//unit.setAndroidPath(unit.getAndroidPath() + listItemSelected);
-					unit.step(STEP_COPY_FROM_ANDROID);
-					
-					onResume();
-					Log.d(tag,"copy alert dialog");							
+					unit.step(STEP_COPY_FROM_ANDROID);					
+					onResume();												
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -249,7 +242,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 
 		case DIALOG_DELETE:
 			TextView textView = (TextView) dialog.findViewById(R.id.Dialog_TextView_delete);
-			textView.setText(unit.getServerPath() + listItemSelected);			
+			textView.setText(unit.getAndroidPath() + listItemSelected);			
 			break;			
 		case DIALOG_COPY:
 			TextView tvCopyFrom = (TextView) dialog.findViewById(R.id.Dialog_TextView_copyfrom);
@@ -272,7 +265,6 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 			break;
 		case R.id.AND_Button_DIRUP:
 			int indexOfSlash = tempAndroidPath.lastIndexOf('/',tempAndroidPath.length()-2);			
-			Log.d(tag,"indexofslash = " + indexOfSlash);
 			if (indexOfSlash >= 0) {
 				tempAndroidPath = tempAndroidPath.copyValueOf(tempAndroidPath.toCharArray(), 0, indexOfSlash+1);				
 			}
@@ -283,8 +275,7 @@ public class AndList extends ListActivity implements OnClickListener, OnCreateCo
 	}	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		Log.d(tag,"position = " + position);
+		super.onListItemClick(l, v, position, id);		
 		if (position < andDirCount) {
 			unit.setAndroidPath(unit.getAndroidPath() + arrayAndList.get(position));			
 			onResume();

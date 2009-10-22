@@ -76,18 +76,14 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 	
 	@Override
 	protected void onResume() {
-		super.onResume();
-		Log.d(tag,"onResume");		
+		super.onResume();		
 		pathEdit.setText(unit.getServerPath());
 		unit.setTurn(FS);
 		unit.step(STEP_REQUEST_DIR); //request dir
-		Log.d(tag,"after step1");
 	
 		//목록 갱신
 		adListAdapter adList_adpt = new adListAdapter(this, R.layout.list_row, arrayFsList);		
 		setListAdapter(adList_adpt);
-		
-		Log.d(tag,"" + arrayFsList.size() + unit.getServerPath());
 	}
 	
 	//onClick method : 경로만 보이게 설정 해 놓음 
@@ -99,8 +95,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 			unit.setServerPath(tempServerPath);			
 			break;
 		case R.id.FS_Button_DIRUP:			
-			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);			
-			Log.d(tag,"indexofslash = " + indexOfSlash);
+			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);
 			if (indexOfSlash > 0) {
 				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
 			}
@@ -111,9 +106,8 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 	}
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		Log.d(tag,"position = " + position);		
-		if (position < fsDirCount) {  // TODO : 디렉토리 나타내는 표식을 해야 할 듯			
+		super.onListItemClick(l, v, position, id);		
+		if (position < fsDirCount) {  // TODO :: 다른 방법이 없을까			
 			unit.setServerPath(unit.getServerPath() + arrayFsList.get(position));			
 			onResume();
 			return ;
@@ -158,10 +152,10 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 		//AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();			
 		
 		switch (item.getItemId()) {
-		case CONTEXT_MENU_ITEM_DELETE:             	//TODO : delete도 해야됨
+		case CONTEXT_MENU_ITEM_DELETE:
 			showDialog(DIALOG_DELETE);
 			return true;
-		case CONTEXT_MENU_ITEM_COPY: //TODO : 젭라..
+		case CONTEXT_MENU_ITEM_COPY: 
 			showDialog(DIALOG_COPY);
 			return true;
 		}
@@ -212,8 +206,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 					unit.setServerPath(unit.getServerPath() + editText.getText().toString());
 					unit.step(STEP_CREATE_DIR);
 					editText.setText("");
-					onResume();
-					Log.d(tag,"alert dialog");							
+					onResume();							
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -239,8 +232,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 				public void onClick(DialogInterface dialog, int which) {							
 					unit.setServerPath(unit.getServerPath() + listItemSelected);
 					unit.step(STEP_DELETE);
-					onResume();
-					Log.d(tag,"alert dialog");							
+					onResume();							
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -268,8 +260,7 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 				public void onClick(DialogInterface dialog, int which) {							
 					//unit.setServerPath(unit.getServerPath() + listItemSelected);
 					unit.step(STEP_COPY_FROM_SERVER);
-					onResume();
-					Log.d(tag,"copy alert dialog");							
+					onResume();							
 				}
 			})
 			.setNegativeButton(android.R.string.cancel, 
@@ -279,13 +270,9 @@ public class FsList extends ListActivity implements OnClickListener, OnCreateCon
 					// do nothing						
 				}					
 			}).create();
-			
-			
-
 		}
 		
 		return null;
-		//return super.onCreateDialog(id);
 	}
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {

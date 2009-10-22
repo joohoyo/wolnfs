@@ -94,6 +94,35 @@ public class Data extends ListActivity {
 	}	
 	//ContextMenu 끝
 
+	//메뉴 시작 
+	@Override 
+	public boolean onCreateOptionsMenu(Menu menu) { 
+		super.onCreateOptionsMenu(menu); 
+		menu.add(0, INSERT_ID, 0, R.string.ip_insert); 
+		menu.add(0, DELETE_ID, 0, R.string.ip_delete); 
+		menu.add(0, MODIFY_ID, 0, R.string.ip_modify); 
+		return true; 
+	} 
+	@Override 
+	public boolean onMenuItemSelected(int featureId, MenuItem item) { 
+		switch(item.getItemId()) { 
+		case INSERT_ID: 
+			createNote(); 
+			return true; 
+
+		case DELETE_ID: 
+			mDbHelper.deleteNote(getListView().getSelectedItemId()); 
+			fillData(); 
+			return true; 
+
+		case MODIFY_ID: 
+			modifyNote(getListView().getSelectedItemId()); 
+			return true; 
+		} 
+		return super.onMenuItemSelected(featureId, item); 
+	} 
+	// Menu 끝  
+
 	private void createNote() {
 		Intent i = new Intent(this, IPlistEdit.class);
 		startActivityForResult(i, ACTIVITY_CREATE);

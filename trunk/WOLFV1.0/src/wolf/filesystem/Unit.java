@@ -20,15 +20,6 @@ import java.net.UnknownHostException;
 import wolf.project.woltest;
 import android.util.Log;
 
-/*
- * 0. 초기화(tcp 설정)
- * 1. a->c dir 요청
- * 2. c->a 내용 응답
- * 3. a->c file 카피 요청
- * 4. c->a file 전송
- * 5. 종료(tcp 해제)
- */
-
 public class Unit implements Constant {
 	private static final String tag = "FsUnit";
 
@@ -99,21 +90,18 @@ public class Unit implements Constant {
 				out.println("" + STEP_DELETE + " " + serverPath+"\n"); 
 				out.flush();
 				sendSocket.close();			
-			} catch(IOException e) {
-				Log.d(tag, "createdir err");
+			} catch(IOException e) {				
 				// do nothing
 			}
 			
 			String tempServerPath = getServerPath();
-			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);			
-			Log.d(tag,"indexofslash = " + indexOfSlash);
+			int indexOfSlash = tempServerPath.lastIndexOf('\\',tempServerPath.length()-2);
 			if (indexOfSlash > 0) {
 				tempServerPath = tempServerPath.copyValueOf(tempServerPath.toCharArray(), 0, indexOfSlash+1);				
 			}
 			setServerPath(tempServerPath);
 		}
-		else {
-			Log.d("unit.delete",getAndroidPath());
+		else {			
 			f = new File(getAndroidPath());
 			setAndroidPath(f.getParent());
 			f.delete();			
@@ -123,8 +111,6 @@ public class Unit implements Constant {
 
 	// Android 디렉토리 list 보여주기 
 	void showDir() {
-		Log.d(tag,"requestDIR");
-		
 		AndList.clear(); 
 
 		File [] file = (new File(getAndroidPath())).listFiles();          
@@ -157,11 +143,6 @@ public class Unit implements Constant {
 			// receiveSocket으로 대기
 			receiveSocket = androidSocket.accept();
 
-			/*
-			in = new BufferedReader(
-			new InputStreamReader(
-			receiveSocket.getInputStream()));	
-			 */
 			DataInputStream dis = new DataInputStream(
 					new BufferedInputStream(
 					receiveSocket.getInputStream()));
@@ -171,11 +152,6 @@ public class Unit implements Constant {
 			File f = new File(getAndroidPath() + strFileName);
 			f.createNewFile();
 			
-			/*
-			PrintWriter pw = new PrintWriter(
-							new BufferedWriter(
-							new FileWriter(f)));
-			*/
 			DataOutputStream dos = new DataOutputStream(
 					new BufferedOutputStream(
 					new FileOutputStream(f)));
@@ -183,23 +159,18 @@ public class Unit implements Constant {
 			byte[] by = new byte[65535];
 			char[] ch = new char[65535];
 			while((c = dis.read(by)) != -1) // 파일 쓰기
-			{
-				Log.d(tag,"" + c);				
+			{				
 				dos.write(by, 0, c);				
 			}			
 			dos.flush();			
 			receiveSocket.close();
-
-			Log.d(tag,"filetransferend");
 		} catch(IOException e) {
-			Log.d(tag, "createdir err");
 			// do nothing
 		}
 		requestDir();
 	}		
 
 	// server 디렉토리 list 보여주기
-	// TODO : 뭔가 손봐야 할 듯
 	void requestDir() {		
 		BufferedReader in = null;
 		PrintWriter out = null;
@@ -215,7 +186,6 @@ public class Unit implements Constant {
 			// receiveSocket으로 대기
 
 			receiveSocket = androidSocket.accept();
-			Log.d(tag,"accept");
 			in = new BufferedReader(new InputStreamReader(receiveSocket.getInputStream()));	
 
 			int fsListCount = Integer.valueOf(in.readLine());
@@ -240,7 +210,6 @@ public class Unit implements Constant {
 			FsList.arrayFsList.addAll(FsList.arrayFiles);
 			receiveSocket.close();			
 		} catch(IOException e) {
-			Log.d(tag, "what'up" + e.toString());
 			//do nothing
 		}		
 	}
@@ -273,7 +242,7 @@ public class Unit implements Constant {
 		if (onRunning == 1) return;
 		try {
 			androidSocket = new ServerSocket(androidPortNumber);
-			androidSocket.setSoTimeout(50000);  // TODO : 이건 왜?
+			androidSocket.setSoTimeout(50000);  
 		} catch (IOException e1) { 
 			// do nothing
 		}
