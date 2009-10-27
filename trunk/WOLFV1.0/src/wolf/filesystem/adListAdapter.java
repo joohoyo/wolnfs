@@ -36,8 +36,12 @@ public class adListAdapter extends ArrayAdapter<String> implements Constant{
 			if (icon != null){
 				if (position < (new Unit().getTurn() == FS ? FsList.fsDirCount : AndList.andDirCount))
 					icon.setImageResource(R.drawable.icon_dir);
-				else
-					icon.setImageResource(R.drawable.icon_file);
+				else{					
+					if (po.endsWith(".mp4"))
+						icon.setImageResource(R.drawable.icon_mp4);
+					else
+						icon.setImageResource(R.drawable.icon_file);
+				}
 			}
 			if(name != null){
 				name.setText(po);
